@@ -17,8 +17,6 @@ AAPlayerController::AAPlayerController()
 void AAPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	SetupPlayerInputComponent();
-	
 }
 
 // Called every frame
@@ -28,7 +26,7 @@ void AAPlayerController::Tick(float DeltaTime)
 
 	// Extract Rotation, create new rotation from input.
 	// Get Forward, and Right axis and scale movement by axis
-	// apply movement
+	// apply movement frame
 
 	FVector FramePositionVector = MovementVector;
 	const FVector FrameRotationVector = RotationVector * RotationScalar * DeltaTime;
@@ -48,7 +46,6 @@ void AAPlayerController::Tick(float DeltaTime)
 		0);
 	
 	FramePositionVector.Normalize();
-
 	SetActorLocationAndRotation(GetActorLocation()
 		+ FramePositionVector * MovementScalar * DeltaTime,
 		NewRotation, true);
@@ -61,10 +58,6 @@ void AAPlayerController::Tick(float DeltaTime)
 void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
-void AAPlayerController::SetupPlayerInputComponent()
-{
 	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(InputComponent);
 	const APlayerController* Player = GetWorld()->GetFirstPlayerController();
 	if (Input)
@@ -81,6 +74,7 @@ void AAPlayerController::SetupPlayerInputComponent()
 		Input->BindAction(LookAction, ETriggerEvent::Completed,this, &AAPlayerController::Look);
 	}
 }
+
 
 void AAPlayerController::Move(const FInputActionValue& Value)
 {
