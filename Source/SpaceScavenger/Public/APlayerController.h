@@ -4,15 +4,15 @@
 
 
 #include "InputActionValue.h"
-
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "APlayerController.generated.h"
 
 class UInputMappingContext;
 class UInputAction;
+class AAInteractable;
 
-UCLASS()
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SPACESCAVENGER_API AAPlayerController : public APawn
 {
 	GENERATED_BODY()
@@ -37,7 +37,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
 	UInputAction* MoveAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
-	UInputAction* LookAction;	
+	UInputAction* LookAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
+	UInputAction* InteractAction;	
+	
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	FVector MovementVector;
@@ -48,14 +51,24 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	float RotationScalar = 50.0f;
 
-	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	USceneComponent* LineTraceOrigin;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	float LineTraceLength = 5;
+
 private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Interact(const FInputActionValue& Value);
+	void DetermineHover();
+	void CalculateLocomotion(float DeltaTime);
 
 	const float PitchClampLower = -89;
 	const float PitchClampUpper = 89;
+
+	AAInteractable* HoveredInteractable;
+
+
 	
 };
 
