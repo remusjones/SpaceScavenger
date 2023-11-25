@@ -24,7 +24,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallabZle)
 	void Interact();
 
 
