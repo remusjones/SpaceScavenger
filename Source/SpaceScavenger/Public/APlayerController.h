@@ -12,6 +12,9 @@ class UInputMappingContext;
 class UInputAction;
 class AAInteractable;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackingDelegate, AAInteractable*, TargetInteractable);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SPACESCAVENGER_API AAPlayerController : public APawn
 {
@@ -56,6 +59,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	float LineTraceLength = 5;
 
+
+	UPROPERTY(BlueprintAssignable)
+	FInteractedDelegate InteractedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FHackingDelegate HackingDelegate;
+	
 private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -67,7 +77,6 @@ private:
 	const float PitchClampUpper = 89;
 
 	AAInteractable* HoveredInteractable;
-
 
 	
 };

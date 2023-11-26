@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AInteractable.h"
 #include "GameFramework/Actor.h"
-#include "AInteractable.generated.h"
+#include "AHackable.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractDelegate);
 
 UCLASS()
-class SPACESCAVENGER_API AAInteractable : public AActor
+class SPACESCAVENGER_API AAHackable : public AAInteractable
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AAInteractable();
+	AAHackable();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,11 +24,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintCallable)
-	void Interact();
 
+	void Hack();
 
-	UPROPERTY(BlueprintAssignable)
-	FInteractDelegate InteractDelegate;
-
+	UPROPERTY(BlueprintReadWrite)
+	bool RequiresHack = true;
+	
 };

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "APlayerController.h"
 
+#include "AHackable.h"
 #include "AInteractable.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -66,7 +67,19 @@ void AAPlayerController::Look(const FInputActionValue& Value)
 void AAPlayerController::Interact(const FInputActionValue& Value)
 {
 	if (HoveredInteractable)
-		HoveredInteractable->Interact();
+	{
+		const auto Hackable = Cast<AAHackable>(HoveredInteractable);
+		if (Hackable && Hackable->RequiresHack)
+		{
+			Hackable->Hack();
+			HackingDelegate.Broadcast(HoveredInteractable);
+		}else
+		{
+			InteractedDelegate.Broadcast();
+			HoveredInteractable->Interact();
+		}
+	}
+		
 }
 
 void AAPlayerController::DetermineHover()
