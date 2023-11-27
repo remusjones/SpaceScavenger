@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "AInteractable.generated.h"
 
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractDelegate);
 
 UCLASS()
@@ -30,5 +31,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FInteractDelegate InteractDelegate;
+
 
 };

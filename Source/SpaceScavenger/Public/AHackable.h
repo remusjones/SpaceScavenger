@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "AHackable.generated.h"
 
+class UCableComponent;
 
 UCLASS()
 class SPACESCAVENGER_API AAHackable : public AAInteractable
@@ -29,5 +30,8 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool RequiresHack = true;
-	
+	UPROPERTY(BlueprintReadWrite)
+	bool HackOnce = true;	
+	UPROPERTY(BlueprintReadWrite)
+	UCableComponent* CableComponent;
 };

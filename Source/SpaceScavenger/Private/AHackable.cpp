@@ -15,7 +15,6 @@ AAHackable::AAHackable()
 void AAHackable::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -26,6 +25,7 @@ void AAHackable::Tick(float DeltaTime)
 
 void AAHackable::Hack()
 {
-	RequiresHack = false;
+	if (HackOnce)
+		RequiresHack = false;
 }
 
