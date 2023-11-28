@@ -13,6 +13,7 @@ class UInputAction;
 class AAInteractable;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHoveredChangedDelegate, AAInteractable*, HoveredInteractable);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackingDelegate, AAInteractable*, TargetInteractable);
 //
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -66,13 +67,16 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FHackingDelegate HackingDelegate;
 	
+	UPROPERTY(BlueprintAssignable)
+	FHoveredChangedDelegate HoveredChangedDelegate;
+	
 private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
 	void DetermineHover();
+	void ChangeHoveredInteractable(AAInteractable* Interactable);
 	void CalculateLocomotion(float DeltaTime);
-
 	const float PitchClampLower = -89;
 	const float PitchClampUpper = 89;
 

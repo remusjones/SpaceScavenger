@@ -71,7 +71,7 @@ void AAPlayerController::Interact(const FInputActionValue& Value)
 		const auto Hackable = Cast<AAHackable>(HoveredInteractable);
 		if (Hackable && Hackable->RequiresHack)
 		{
-			Hackable->Hack();
+			Hackable->HackStarted();
 			HackingDelegate.Broadcast(HoveredInteractable);
 		}else
 		{
@@ -93,21 +93,21 @@ void AAPlayerController::DetermineHover()
 	
 	if (HitResult.GetActor())
 	{
-		HoveredInteractable = Cast<AAInteractable>(HitResult.GetActor());
+		AAInteractable* NewHoveredInteractable = Cast<AAInteractable>(
+			HitResult.GetActor());
 		
-		if (HoveredInteractable)
-		{
-			DrawDebugLine(
-					  GetWorld(),
-					  StartLocation,
-					  HitResult.Location,
-					  FColor::Green,  
-					  false, 
-					  .1f,  
-					  0,
-					  0.25f  
-				  );
-		}
+		ChangeHoveredInteractable(NewHoveredInteractable);
+		
+	}else ChangeHoveredInteractable(nullptr); 
+}
+
+void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
+{
+	
+	if (HoveredInteractable != Interactable)
+	{
+		HoveredInteractable = Interactable;
+		HoveredChangedDelegate.Broadcast(Interactable);
 	}
 }
 

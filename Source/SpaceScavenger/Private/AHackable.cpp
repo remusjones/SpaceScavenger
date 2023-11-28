@@ -23,9 +23,15 @@ void AAHackable::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AAHackable::Hack()
+void AAHackable::HackStarted()
+{
+
+}
+
+void AAHackable::HackComplete()
 {
 	if (HackOnce)
 		RequiresHack = false;
+	Interact();
 }
 

@@ -26,7 +26,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Hack();
+	void HackStarted();
+	UFUNCTION(BlueprintCallable)
+	void HackComplete();
 
 	UPROPERTY(BlueprintReadWrite)
 	bool RequiresHack = true;
