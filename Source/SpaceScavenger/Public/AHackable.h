@@ -7,6 +7,12 @@
 #include "GameFramework/Actor.h"
 #include "AHackable.generated.h"
 
+UENUM(BlueprintType)
+enum class HackableState : uint8 {
+	Unlocked = 0 UMETA(DisplayName = "Unlocked"),
+	Locked = 1  UMETA(DisplayName = "Locked")
+};
+
 class UCableComponent;
 
 UCLASS()
