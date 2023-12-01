@@ -9,8 +9,8 @@
 
 
 
-
 class UCableComponent;
+class UNiagaraComponent;
 
 UCLASS()
 class SPACESCAVENGER_API AAHackable : public AAInteractable
@@ -47,5 +47,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float CableLengthHacking = 20;		
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float CableLengthResting = 50;		
+	float CableLengthResting = 50;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UNiagaraComponent* DisconnectEffect;
 };

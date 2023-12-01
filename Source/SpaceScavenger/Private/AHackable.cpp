@@ -3,6 +3,8 @@
 
 #include "AHackable.h"
 #include "CableComponent.h"
+#include "NiagaraComponent.h"
+#include "DrawDebugHelpers.h"
 // Sets default values
 AAHackable::AAHackable()
 {
@@ -21,6 +23,10 @@ void AAHackable::BeginPlay()
 void AAHackable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	TArray<FVector> Locations;
+	CableComponent->GetCableParticleLocations(Locations);
+	DisconnectEffect->SetWorldLocation(Locations.Last());
 }
 
 void AAHackable::AttachCable(UActorComponent* Target)
@@ -39,6 +45,9 @@ void AAHackable::AttachCable(UActorComponent* Target)
 		CableComponent->SetAttachEndTo(nullptr, "");
 		CableComponent->bEnableCollision = true;
 		CableComponent->CableLength = CableLengthResting;
+	
+		if (DisconnectEffect)	
+			DisconnectEffect->Activate(true);
 	}
 }
 
