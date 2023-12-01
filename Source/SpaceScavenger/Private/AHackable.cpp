@@ -29,8 +29,11 @@ void AAHackable::Tick(float DeltaTime)
 	DisconnectEffect->SetWorldLocation(Locations.Last());
 }
 
+bool ignoreSimTimeoutFlag = false;
 void AAHackable::AttachCable(UActorComponent* Target)
 {
+	CableComponent->SetActive(true);
+	ignoreSimTimeoutFlag = true;
 	if (Target)
 	{
 		CableComponent->SetAttachEndTo(Target->GetOwner(), Target->GetFName());
@@ -38,6 +41,7 @@ void AAHackable::AttachCable(UActorComponent* Target)
 		CableComponent->bEnableCollision = false;
 		CableComponent->bAttachEnd = true;
 		CableComponent->CableLength = CableLengthHacking;
+		
 	}
 	else
 	{
@@ -48,7 +52,17 @@ void AAHackable::AttachCable(UActorComponent* Target)
 	
 		if (DisconnectEffect)	
 			DisconnectEffect->Activate(true);
+		ignoreSimTimeoutFlag = false;
+		GetWorldTimerManager().SetTimer(CableTimerHandler, this,
+		 &AAHackable::DisableCableSimulation,
+		 CableSimulationTimer,false);
 	}
+}
+
+void AAHackable::DisableCableSimulation()
+{
+	if (!ignoreSimTimeoutFlag)
+		CableComponent->SetActive(false);
 }
 
 void AAHackable::HackStarted()

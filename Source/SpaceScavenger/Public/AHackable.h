@@ -29,14 +29,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void AttachCable(UActorComponent* Target);
-	
+	virtual void DisableCableSimulation();
 	void HackStarted();
 	UFUNCTION(BlueprintCallable)
 	void HackComplete();
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool RequiresHack = true;
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool HackOnce = true;	
 	UPROPERTY(BlueprintReadWrite)
 	UCableComponent* CableComponent;
@@ -48,7 +48,10 @@ public:
 	float CableLengthHacking = 20;		
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float CableLengthResting = 50;
-	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CableSimulationTimer = 3;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UNiagaraComponent* DisconnectEffect;
+
+	FTimerHandle CableTimerHandler;
 };
