@@ -76,21 +76,21 @@ void AAPlayerController::Interact(const FInputActionValue& Value)
 
 void AAPlayerController::DetermineHover()
 {
-
 	const FVector StartLocation = LineTraceOrigin->GetComponentLocation();
 	FHitResult HitResult;
 	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation,
 		StartLocation + LineTraceOrigin->GetForwardVector() * LineTraceLength,
 		ECC_WorldDynamic);
+	AAInteractable* NewHoveredInteractable = nullptr;
 	
 	if (HitResult.GetActor())
 	{
-		AAInteractable* NewHoveredInteractable = Cast<AAInteractable>(
+		NewHoveredInteractable = Cast<AAInteractable>(
 			HitResult.GetActor());
-		
-		ChangeHoveredInteractable(NewHoveredInteractable);
-		HackTool->UpdateDisplay(NewHoveredInteractable);	
-	}else HackTool->UpdateDisplay(nullptr); 
+	}
+
+	ChangeHoveredInteractable(NewHoveredInteractable);
+	HackTool->UpdateDisplay(NewHoveredInteractable);	
 }
 
 void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
