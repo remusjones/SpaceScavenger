@@ -2,6 +2,7 @@
 #include "APlayerController.h"
 
 #include "AHackable.h"
+#include "AHackTool.h"
 #include "AInteractable.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -68,16 +69,7 @@ void AAPlayerController::Interact(const FInputActionValue& Value)
 {
 	if (HoveredInteractable)
 	{
-		const auto Hackable = Cast<AAHackable>(HoveredInteractable);
-		if (Hackable && Hackable->RequiresHack)
-		{
-			Hackable->HackStarted();
-			HackingDelegate.Broadcast(HoveredInteractable);
-		}else
-		{
-			InteractedDelegate.Broadcast();
-			HoveredInteractable->Interact();
-		}
+		HackTool->TryInteract(HoveredInteractable);
 	}
 		
 }
@@ -97,13 +89,12 @@ void AAPlayerController::DetermineHover()
 			HitResult.GetActor());
 		
 		ChangeHoveredInteractable(NewHoveredInteractable);
-		
-	}else ChangeHoveredInteractable(nullptr); 
+		HackTool->UpdateDisplay(NewHoveredInteractable);	
+	}else HackTool->UpdateDisplay(nullptr); 
 }
 
 void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
 {
-	
 	if (HoveredInteractable != Interactable)
 	{
 		HoveredInteractable = Interactable;
@@ -111,7 +102,7 @@ void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
 	}
 }
 
-void AAPlayerController::CalculateLocomotion(float DeltaTime)
+void AAPlayerController::CalculateLocomotion(const float DeltaTime)
 {
 	
 	// Extract Rotation, create new rotation from input.

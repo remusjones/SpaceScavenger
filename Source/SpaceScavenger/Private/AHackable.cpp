@@ -2,7 +2,7 @@
 
 
 #include "AHackable.h"
-
+#include "CableComponent.h"
 // Sets default values
 AAHackable::AAHackable()
 {
@@ -21,6 +21,25 @@ void AAHackable::BeginPlay()
 void AAHackable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AAHackable::AttachCable(UActorComponent* Target)
+{
+	if (Target)
+	{
+		CableComponent->SetAttachEndTo(Target->GetOwner(), Target->GetFName());
+		CableComponent->SetVisibility(true);
+		CableComponent->bEnableCollision = false;
+		CableComponent->bAttachEnd = true;
+		CableComponent->CableLength = CableLengthHacking;
+	}
+	else
+	{
+		CableComponent->bAttachEnd = false;
+		CableComponent->SetAttachEndTo(nullptr, "");
+		CableComponent->bEnableCollision = true;
+		CableComponent->CableLength = CableLengthResting;
+	}
 }
 
 void AAHackable::HackStarted()

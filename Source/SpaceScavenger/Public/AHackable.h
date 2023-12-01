@@ -7,11 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "AHackable.generated.h"
 
-UENUM(BlueprintType)
-enum class HackableState : uint8 {
-	Unlocked = 0 UMETA(DisplayName = "Unlocked"),
-	Locked = 1  UMETA(DisplayName = "Locked")
-};
+
+
 
 class UCableComponent;
 
@@ -31,7 +28,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	virtual void AttachCable(UActorComponent* Target);
+	
 	void HackStarted();
 	UFUNCTION(BlueprintCallable)
 	void HackComplete();
@@ -42,4 +40,12 @@ public:
 	bool HackOnce = true;	
 	UPROPERTY(BlueprintReadWrite)
 	UCableComponent* CableComponent;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float HackDifficulty = 3;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CableLengthHacking = 20;		
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float CableLengthResting = 50;		
 };

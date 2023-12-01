@@ -11,6 +11,7 @@
 class UInputMappingContext;
 class UInputAction;
 class AAInteractable;
+class AAHackTool;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHoveredChangedDelegate, AAInteractable*, HoveredInteractable);
@@ -36,6 +37,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	// Input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	UInputMappingContext* InputMapping;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
@@ -45,7 +47,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
 	UInputAction* InteractAction;	
 	
-	
+	// Movement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	FVector MovementVector;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
@@ -55,20 +57,22 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	float RotationScalar = 50.0f;
 
+	// Interaction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	USceneComponent* LineTraceOrigin;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	float LineTraceLength = 5;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	AAHackTool* HackTool; // Hack tool
 
-
+	// Delegates
 	UPROPERTY(BlueprintAssignable)
 	FInteractedDelegate InteractedDelegate;
-
 	UPROPERTY(BlueprintAssignable)
 	FHackingDelegate HackingDelegate;
-	
 	UPROPERTY(BlueprintAssignable)
 	FHoveredChangedDelegate HoveredChangedDelegate;
+
 	
 private:
 	void Move(const FInputActionValue& Value);
@@ -77,11 +81,11 @@ private:
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
 	void CalculateLocomotion(float DeltaTime);
+	
 	const float PitchClampLower = -89;
 	const float PitchClampUpper = 89;
 
 	AAInteractable* HoveredInteractable;
-
 	
 };
 
