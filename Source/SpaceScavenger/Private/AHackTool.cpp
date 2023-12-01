@@ -41,7 +41,7 @@ void AAHackTool::ConfigureTimeline()
 	OnTimelineCallback.BindUFunction(this, FName("HackingTick"));
 	
 	HackingTimeline->SetTimelineFinishedFunc(OnTimelineFinishedCallback);
-	HackingTimeline->AddInterpFloat(HackingCurve, OnTimelineCallback);
+	HackingTimeline->AddInterpFloat(HackingCurve,OnTimelineCallback, "InterpFloatCurve");
 	HackingTimeline->RegisterComponent();
 	
 }
@@ -62,7 +62,6 @@ void AAHackTool::UpdateDisplay(AAInteractable* HoveredInteractable)
 
 	if (ActiveToolState != EToolState::Idle)
 		return;
-
 
 	if (const AAHackable* Hackable = Cast<AAHackable>(HoveredInteractable); Hackable && Hackable->RequiresHack)
 		DisplayTextChangedDelegate.Broadcast(HackableStatusMessages.FindRef(EHackableState::Locked));
@@ -107,8 +106,13 @@ void AAHackTool::BeginHacking(AAHackable* TargetHackable)
 	ActiveToolState = EToolState::Hacking;
 	CurrentHackable = TargetHackable;
 	CurrentHackable->AttachCable(ConnectionPoint);
-	DisplayTextChangedDelegate.Broadcast(ToolStatusMessages.FindRef(ActiveToolState));	
-	HackingCurve->FloatCurve.Keys.Last().Time = TargetHackable->HackDifficulty;
+	DisplayTextChangedDelegate.Broadcast(ToolStatusMessages.FindRef(ActiveToolState));
+
+	const int KeysCount = HackingCurve->FloatCurve.Keys.Num();
+	for(int i = 1; i < HackingCurve->FloatCurve.Keys.Num(); i++)
+	{
+		HackingCurve->FloatCurve.Keys[KeysCount- 1 - i].Time = TargetHackable->HackDifficulty / i; 
+	}
 	HackingTimeline->SetTimelineLength(TargetHackable->HackDifficulty);
 	HackingTimeline->PlayFromStart();
 }

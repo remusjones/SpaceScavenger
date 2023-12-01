@@ -79,6 +79,10 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FDisplayTextChangedDelegate DisplayTextChangedDelegate;
+
+
+	UPROPERTY()
+	float InterpFloatCurve;
 	
 private:
 
@@ -86,7 +90,6 @@ private:
 	EToolState ActiveToolState = EToolState::Idle;
 	AAHackable* CurrentHackable;
 	AAInteractable* LastHovered;
-	
 	UTimelineComponent* HackingTimeline;
 	
 };
