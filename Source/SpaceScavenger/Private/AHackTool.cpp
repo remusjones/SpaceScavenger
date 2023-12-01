@@ -79,7 +79,7 @@ void AAHackTool::TryInteract(AAInteractable* TargetInteractable)
 	switch (ActiveToolState)
 	{
 		case EToolState::Idle:
-			Hackable ? BeginHacking(Hackable) : TargetInteractable->Interact();
+			Hackable && Hackable->RequiresHack ? BeginHacking(Hackable) : TargetInteractable->Interact();
 			break;
 		case EToolState::Hacking:
 			break;
@@ -96,7 +96,7 @@ void AAHackTool::FinishedHacking()
 	UpdateDisplay(LastHovered);
 }
 
-void AAHackTool::HackingTick(float HackPercentage)
+void AAHackTool::HackingTick(const float HackPercentage)
 {
 	HackPercentageDelegate.Broadcast(HackPercentage);
 }
