@@ -33,11 +33,16 @@ public:
 	void HackStarted();
 	UFUNCTION(BlueprintCallable)
 	void HackComplete();
+	bool TryInteract();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool RequiresHack = true;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	bool HackOnce = true;	
+	bool HackOnce = true;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool AutoInteractAfterHack = false;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString Identifier;
 	UPROPERTY(BlueprintReadWrite)
 	UCableComponent* CableComponent;
 
@@ -53,5 +58,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UNiagaraComponent* DisconnectEffect;
 
+private:
 	FTimerHandle CableTimerHandler;
 };

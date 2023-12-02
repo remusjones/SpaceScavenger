@@ -74,6 +74,16 @@ void AAHackable::HackComplete()
 {
 	if (HackOnce)
 		RequiresHack = false;
-	Interact();
+
+	if (AutoInteractAfterHack)
+		Interact();
+}
+
+bool AAHackable::TryInteract()
+{
+	if (!RequiresHack)
+		Interact();
+
+	return !RequiresHack;
 }
 

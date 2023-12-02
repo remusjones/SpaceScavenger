@@ -6,15 +6,15 @@
 #include "ACCLIProcessor.h"
 #include "ACDoorCLIProcessor.generated.h"
 
-class AAInteractable;
+class AAHackable;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPACESCAVENGER_API UACDoorCLIProcessor : public UACCLIProcessor
 {
 	GENERATED_BODY()
 	virtual FString ProcessCommand(TArray<FString> Args) override;
-
 public:
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<AAInteractable*> AccessableInteractables;
+	TArray<AAHackable*> AccessibleInteractables;
 };

@@ -3,6 +3,8 @@
 
 #include "ACCLIProcessor.h"
 
+#include "AHackable.h"
+
 // Sets default values for this component's properties
 UACCLIProcessor::UACCLIProcessor()
 {
@@ -35,11 +37,10 @@ void UACCLIProcessor::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 void UACCLIProcessor::BreakInput(const FString Input, FString& Command,
                                  TArray<FString>& Args)
 {
-	
 	TArray<FString> SplitArray;
 
 	// split
-	Input.ParseIntoArray( SplitArray, TEXT(" "));
+	Input.ParseIntoArray(SplitArray, TEXT(" "));
 
 	// Early exit
 	if (SplitArray.Num() == 0)
@@ -68,3 +69,19 @@ FString UACCLIProcessor::ProcessCommand(TArray<FString> Args)
 	return {"ERROR"};
 }
 
+bool UACCLIProcessor::ProcessListCommand(TArray<AAHackable*> ObjectsToList,
+	TArray<FString> Args, FString& ObjectsAvailable)
+{
+	if (Args.Num() == 0)
+		return false;
+	if (Args[0] != ListArgument)
+		return false;
+	
+	for(int i = 0; i < ObjectsToList.Num(); i++)
+	{
+		ObjectsAvailable.Append(ObjectsToList[i]->Identifier);
+		if (i < ObjectsToList.Num() - 1)
+			ObjectsAvailable.Append(", ");
+	}
+	return true;
+}

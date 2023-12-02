@@ -7,6 +7,8 @@
 #include "ACCLIProcessor.generated.h"
 
 
+class AAHackable;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPACESCAVENGER_API UACCLIProcessor : public UActorComponent
 {
@@ -29,7 +31,15 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	virtual FString ProcessCommand(TArray<FString> Args);
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool ProcessListCommand(TArray<AAHackable*> ObjectsToList, TArray<FString> Args, FString& ObjectsAvailable);	
+	
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString CommandNamespace = "default";
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString ListArgument = "list";
+	
 };
