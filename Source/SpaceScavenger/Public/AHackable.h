@@ -42,7 +42,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool AutoInteractAfterHack = false;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString Identifier;
+	FText Identifier;
 	UPROPERTY(BlueprintReadWrite)
 	UCableComponent* CableComponent;
 

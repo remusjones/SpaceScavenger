@@ -13,8 +13,8 @@ FString UACDoorCLIProcessor::ProcessCommand(TArray<FString> Args)
 	{
 		for (const auto Hackable : AccessibleInteractables)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *Hackable->Identifier);
-			if (Hackable->Identifier.ToLower() == Args[0])
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *Hackable->Identifier.ToString());
+			if (Hackable->Identifier.ToLower().ToString() == Args[0])
 			{
 				if (Hackable->TryInteract())
 					return FString::Printf(TEXT("Accessing Door: %s"), *Args[0]);

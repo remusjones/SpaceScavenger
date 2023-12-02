@@ -79,7 +79,7 @@ bool UACCLIProcessor::ProcessListCommand(TArray<AAHackable*> ObjectsToList,
 	
 	for(int i = 0; i < ObjectsToList.Num(); i++)
 	{
-		ObjectsAvailable.Append(ObjectsToList[i]->Identifier);
+		ObjectsAvailable.Append(ObjectsToList[i]->Identifier.ToString());
 		if (i < ObjectsToList.Num() - 1)
 			ObjectsAvailable.Append(", ");
 	}

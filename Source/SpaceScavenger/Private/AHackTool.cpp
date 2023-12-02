@@ -62,13 +62,23 @@ void AAHackTool::UpdateDisplay(AAInteractable* HoveredInteractable)
 
 	if (ActiveToolState != EToolState::Idle)
 		return;
-
-	if (const AAHackable* Hackable = Cast<AAHackable>(HoveredInteractable); Hackable && Hackable->RequiresHack)
-		DisplayTextChangedDelegate.Broadcast(HackableStatusMessages.FindRef(EHackableState::Locked));
+	
+	
+	if (const AAHackable* Hackable = Cast<AAHackable>(HoveredInteractable); Hackable )
+	{
+		FFormatNamedArguments Args;
+		Args.Add("State", HackableStatusMessages.FindRef(Hackable->RequiresHack
+			? EHackableState::Locked
+			: EHackableState::Unlocked));
+		
+		Args.Add("Identifier", Hackable->Identifier);	
+		
+		DisplayTextChangedDelegate.Broadcast(FText::Format(NSLOCTEXT("Hacking","State","{Identifier}\n{State}"), Args));
+	}
 	else if (!Hackable && !HoveredInteractable)
 		DisplayTextChangedDelegate.Broadcast(ToolStatusMessages.FindRef(EToolState::Idle));
-	else 
-		DisplayTextChangedDelegate.Broadcast(HackableStatusMessages.FindRef(EHackableState::Unlocked));
+	else                        
+		DisplayTextChangedDelegate.Broadcast( HackableStatusMessages.FindRef(EHackableState::Unlocked));
 		
 }
 
