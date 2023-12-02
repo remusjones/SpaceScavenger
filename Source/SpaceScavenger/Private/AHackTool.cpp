@@ -111,7 +111,7 @@ void AAHackTool::BeginHacking(AAHackable* TargetHackable)
 	const int KeysCount = HackingCurve->FloatCurve.Keys.Num();
 	for(int i = 1; i < HackingCurve->FloatCurve.Keys.Num(); i++)
 	{
-		HackingCurve->FloatCurve.Keys[KeysCount- 1 - i].Time = TargetHackable->HackDifficulty / i; 
+		HackingCurve->FloatCurve.Keys[KeysCount- 1 - i].Time = TargetHackable->HackDifficulty / i-1; 
 	}
 	HackingTimeline->SetTimelineLength(TargetHackable->HackDifficulty);
 	HackingTimeline->PlayFromStart();
