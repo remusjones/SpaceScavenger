@@ -40,7 +40,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool HackOnce = true;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	bool AutoInteractAfterHack = false;
+	bool AutoInteractAfterHack = true;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText Identifier;
 	UPROPERTY(BlueprintReadWrite)
