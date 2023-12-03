@@ -5,7 +5,7 @@
 
 #include "InputActionValue.h"
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
 #include "APlayerController.generated.h"
 
 class UInputMappingContext;
@@ -18,7 +18,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHoveredChangedDelegate, AAInteracta
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackingDelegate, AAInteractable*, TargetInteractable);
 //
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class SPACESCAVENGER_API AAPlayerController : public APawn
+class SPACESCAVENGER_API AAPlayerController : public ACharacter
 {
 	GENERATED_BODY()
 

@@ -126,8 +126,7 @@ void AAPlayerController::CalculateLocomotion(const float DeltaTime)
 		0);
 	
 	FramePositionVector.Normalize();
-	SetActorLocationAndRotation(GetActorLocation()
-		+ FramePositionVector * MovementScalar * DeltaTime,
-		NewRotation, true);
+	SetActorRotation(NewRotation);
+	AddMovementInput(FramePositionVector * MovementScalar * DeltaTime);
 }
 
