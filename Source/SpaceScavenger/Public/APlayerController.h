@@ -76,6 +76,13 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FHoveredChangedDelegate HoveredChangedDelegate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
+	float AirControl = 0.66;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
+	float WalkSpeed = 300;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
+	float CrouchWalkSpeed = 150;
+
 	
 private:
 	void Move(const FInputActionValue& Value);
@@ -83,11 +90,8 @@ private:
 	void Interact(const FInputActionValue& Value);
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
-	void CalculateLocomotion(float DeltaTime);
 	
-	const float PitchClampLower = -89;
-	const float PitchClampUpper = 89;
-
+	UPROPERTY()	
 	AAInteractable* HoveredInteractable;
 	
 };

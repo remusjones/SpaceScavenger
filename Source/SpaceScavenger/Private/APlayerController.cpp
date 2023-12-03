@@ -5,7 +5,7 @@
 #include "AInteractable.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-#include "DrawDebugHelpers.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -20,13 +20,17 @@ AAPlayerController::AAPlayerController()
 void AAPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	const auto MovementComponent = GetCharacterMovement();
+	MovementComponent->MaxWalkSpeed = WalkSpeed;
+	MovementComponent->MaxWalkSpeedCrouched = CrouchWalkSpeed;
+	MovementComponent->AirControl = AirControl;
 }
 
 // Called every frame
 void AAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CalculateLocomotion(DeltaTime);
 	DetermineHover();	
 }
 
@@ -114,8 +118,3 @@ void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
 		HoveredChangedDelegate.Broadcast(Interactable);
 	}
 }
-
-void AAPlayerController::CalculateLocomotion(const float DeltaTime)
-{
-}
-
