@@ -52,6 +52,7 @@ public:
 	virtual void TryInteract(AAInteractable* TargetInteractable);
 	virtual void BeginHacking(AAHackable* TargetHackable);
 	virtual void FinishedHacking();
+	virtual void InterruptHacking();
 	
 	
 	UFUNCTION()
@@ -73,6 +74,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EHackableState, FText> HackableStatusMessages;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaximumHackingLength = 200;
 	// Delegates
 	UPROPERTY(BlueprintAssignable)
 	FHackPercentageDelegate HackPercentageDelegate;
@@ -83,6 +86,7 @@ public:
 
 	UPROPERTY()
 	float InterpFloatCurve;
+
 	
 private:
 

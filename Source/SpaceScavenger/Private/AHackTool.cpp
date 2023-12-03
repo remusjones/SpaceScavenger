@@ -73,7 +73,7 @@ void AAHackTool::UpdateDisplay(AAInteractable* HoveredInteractable)
 		
 		Args.Add("Identifier", Hackable->Identifier);	
 		
-		DisplayTextChangedDelegate.Broadcast(FText::Format(NSLOCTEXT("Hacking","State","{Identifier}\n{State}"), Args));
+		DisplayTextChangedDelegate.Broadcast(FText::Format(NSLOCTEXT("Tool","State","{Identifier}\n{State}"), Args));
 	}
 	else if (!Hackable && !HoveredInteractable)
 		DisplayTextChangedDelegate.Broadcast(ToolStatusMessages.FindRef(EToolState::Idle));
@@ -100,15 +100,24 @@ void AAHackTool::TryInteract(AAInteractable* TargetInteractable)
 void AAHackTool::FinishedHacking()
 {
 	CurrentHackable->HackComplete();
+	InterruptHacking();
+}
+
+void AAHackTool::InterruptHacking()
+{
 	CurrentHackable->AttachCable(nullptr);
 	CurrentHackable = nullptr;
 	ActiveToolState = EToolState::Idle;
 	UpdateDisplay(LastHovered);
+	HackingTimeline->Stop();
 }
 
 void AAHackTool::HackingTick(const float HackPercentage)
 {
 	HackPercentageDelegate.Broadcast(HackPercentage);
+
+	if (!CurrentHackable || FVector::Dist(CurrentHackable->GetActorLocation(), ConnectionPoint->GetComponentLocation()) > MaximumHackingLength)
+		InterruptHacking();
 }
 
 void AAHackTool::BeginHacking(AAHackable* TargetHackable)
@@ -116,7 +125,11 @@ void AAHackTool::BeginHacking(AAHackable* TargetHackable)
 	ActiveToolState = EToolState::Hacking;
 	CurrentHackable = TargetHackable;
 	CurrentHackable->AttachCable(ConnectionPoint);
-	DisplayTextChangedDelegate.Broadcast(ToolStatusMessages.FindRef(ActiveToolState));
+	
+	FFormatNamedArguments Args;
+	Args.Add("Identifier", TargetHackable->Identifier);
+	Args.Add("State", ToolStatusMessages.FindRef(ActiveToolState));
+	DisplayTextChangedDelegate.Broadcast(FText::Format(NSLOCTEXT("Tool","State","{Identifier}\n{State}"), Args));
 
 	const int KeysCount = HackingCurve->FloatCurve.Keys.Num();
 	for(int i = 1; i < HackingCurve->FloatCurve.Keys.Num(); i++)

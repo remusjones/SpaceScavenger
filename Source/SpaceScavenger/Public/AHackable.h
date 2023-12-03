@@ -34,7 +34,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HackComplete();
 	bool TryInteract();
-
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool RequiresHack = true;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
