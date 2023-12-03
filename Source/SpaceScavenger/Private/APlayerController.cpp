@@ -1,11 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "APlayerController.h"
 
-#include "AHackable.h"
 #include "AHackTool.h"
 #include "AInteractable.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
@@ -46,32 +47,44 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered,this, &AAPlayerController::Move);
 		Input->BindAction(MoveAction, ETriggerEvent::Completed,this, &AAPlayerController::Move);
 		
+		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &Super::Jump);
+		
 		Input->BindAction(LookAction, ETriggerEvent::Triggered,this, &AAPlayerController::Look);
 		Input->BindAction(LookAction, ETriggerEvent::Completed,this, &AAPlayerController::Look);
 
 		Input->BindAction(InteractAction, ETriggerEvent::Started, this, &AAPlayerController::Interact);
+		
 	}
 }
-
 
 void AAPlayerController::Move(const FInputActionValue& Value)
 {
 	const FVector Input = Value.Get<FVector>();
 	MovementVector = FVector(Input.Y, Input.X, 0); // adjust mapping
+
+	const FRotator FacingDirection = GetActorRotation();
+	const FVector ForwardMoveVector = MovementVector.X * UKismetMathLibrary::GetForwardVector(FacingDirection);
+	const FVector RightMoveVector = MovementVector.Y * UKismetMathLibrary::GetRightVector(FacingDirection); 
+	//
+	MovementVector = FVector(ForwardMoveVector.X + RightMoveVector.X,
+		ForwardMoveVector.Y + RightMoveVector.Y,0);
+	MovementVector.Normalize();
+	AddMovementInput(MovementVector);
 }
 
 void AAPlayerController::Look(const FInputActionValue& Value)
 {
 	RotationVector = Value.Get<FVector>();
+	
+	// apply movement frame
+	AddControllerYawInput(RotationVector.X);
+	AddControllerPitchInput(-RotationVector.Y);
 }
 
 void AAPlayerController::Interact(const FInputActionValue& Value)
 {
 	if (HoveredInteractable)
-	{
 		HackTool->TryInteract(HoveredInteractable);
-	}
-		
 }
 
 void AAPlayerController::DetermineHover()
@@ -104,29 +117,5 @@ void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
 
 void AAPlayerController::CalculateLocomotion(const float DeltaTime)
 {
-	
-	// Extract Rotation, create new rotation from input.
-	// Get Forward, and Right axis and scale movement by axis
-	// apply movement frame
-
-	FVector FramePositionVector = MovementVector;
-	const FVector FrameRotationVector = RotationVector * RotationScalar * DeltaTime;
-	
-	const FRotator RotatorOriginal = GetActorRotation();
-	const FRotator NewRotation = FRotator(
-		FMath::ClampAngle(RotatorOriginal.Pitch + FrameRotationVector.Y, PitchClampLower, PitchClampUpper),
-		RotatorOriginal.Yaw + FrameRotationVector.X, RotatorOriginal.Roll);
-	
-
-	const FVector ForwardMoveVector = FramePositionVector.X * GetActorForwardVector();
-	const FVector RightMoveVector = FramePositionVector.Y * GetActorRightVector(); 
-	
-	FramePositionVector = FVector(ForwardMoveVector.X + RightMoveVector.X,
-		ForwardMoveVector.Y + RightMoveVector.Y,
-		0);
-	
-	FramePositionVector.Normalize();
-	SetActorRotation(NewRotation);
-	AddMovementInput(FramePositionVector * MovementScalar * DeltaTime);
 }
 

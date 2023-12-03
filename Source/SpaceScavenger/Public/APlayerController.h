@@ -43,9 +43,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
 	UInputAction* MoveAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
+	UInputAction* JumpAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
 	UInputAction* LookAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
-	UInputAction* InteractAction;	
+	UInputAction* InteractAction;
+
 	
 	// Movement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
@@ -53,9 +56,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	FVector RotationVector;	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-	float MovementScalar = 50.0f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-	float RotationScalar = 50.0f;
+	USceneComponent* Test;	
+	
 
 	// Interaction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
@@ -65,6 +67,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	AAHackTool* HackTool; // Hack tool
 
+	
 	// Delegates
 	UPROPERTY(BlueprintAssignable)
 	FInteractedDelegate InteractedDelegate;
