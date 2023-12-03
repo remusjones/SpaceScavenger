@@ -39,7 +39,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString CommandNamespace = "default";
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString ListArgument = "list";
+	UPROPERTY(BlueprintReadWrite, EditAnywhere) 
+	FString ListArgument = "list"; // TODO: Make this a CLI Processor
 	
 };
