@@ -12,7 +12,7 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPACESCAVENGER_API UACDoorCLIProcessor : public UACCLIProcessor
 {
 	GENERATED_BODY()
-	virtual FString ProcessCommand(TArray<FString> Args) override;
+	virtual bool ProcessCommand(TArray<FString> Args, FString& Output) override;
 public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
