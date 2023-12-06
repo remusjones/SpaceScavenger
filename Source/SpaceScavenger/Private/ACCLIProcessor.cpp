@@ -64,8 +64,61 @@ void UACCLIProcessor::BreakInput(const FString Input, FString& Command,
 	
 }
 
+void UACCLIProcessor::RegisterCommand(const FString Command, const FProcessCommandDelegate& Callback)
+{
+	if (CommandProcessorMap.Contains(Command))
+	{
+		CommandProcessorMap[Command].Add(Callback);
+	}else
+	{
+		CommandProcessorMap.Add(Command, TArray{Callback});
+	}
+}
+
+void UACCLIProcessor::UnregisterCommand(const FString Command, const FProcessCommandDelegate& Callback)
+{
+	if (CommandProcessorMap.Contains(Command))
+	{
+		CommandProcessorMap[Command].Remove(Callback);
+		if (CommandProcessorMap[Command].Num() == 0)
+			CommandProcessorMap.Remove(Command);
+	}
+}
+
+
 FString UACCLIProcessor::ProcessCommand(TArray<FString> Args)
 {
+	if (Args.Num() > 0)
+	{
+		FString Final;
+		if (CommandProcessorMap.Contains(Args[0]))
+		{
+			for (auto ProcessCommandDelegate : CommandProcessorMap[Args[0]])
+			{
+				if (!ProcessCommandDelegate.IsBound())
+					continue;
+				
+				FString CommandOutput;
+				TArray<FString> subArguments = TArray<FString>();
+				if (Args.Num() > 1)
+				{
+					subArguments.SetNumUninitialized(Args.Num()-1);
+					for(int i = 1; i < Args.Num(); i++)
+					{
+						subArguments[i - 1] = Args[i];
+					}
+				}
+				CommandOutput = ProcessCommandDelegate.Execute(subArguments);
+				if (CommandOutput.Len() > 0)
+					Final.Append(CommandOutput).Append("\n");
+			}
+		}
+		if (Final.Len() > 0)
+		{
+			Final.RemoveFromEnd("\n");
+			return Final;
+		}
+	}
 	return {"ERROR"};
 }
 
