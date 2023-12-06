@@ -8,10 +8,7 @@
 
 
 class AAHackable;
-DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(
-	FString, 
-	FProcessCommandDelegate,
-	TArray<FString>, Args);
+DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(FString, FProcessCommandDelegate, const TArray<FString>&, Args);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPACESCAVENGER_API UACCLIProcessor : public UActorComponent
@@ -32,12 +29,13 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	static void BreakInput(FString Input, FString& Command, TArray<FString>& Args);
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void RegisterCommand(const FString Command, const FProcessCommandDelegate& Callback);
 	UFUNCTION(BlueprintCallable)
 	virtual void UnregisterCommand(const FString Command, const FProcessCommandDelegate& Callback);
 	UFUNCTION(BlueprintCallable)
-	virtual FString ProcessCommand(TArray<FString> Args);
+	virtual bool ProcessCommand(TArray<FString> Args, FString& Output);
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool ProcessListCommand(TArray<AAHackable*> ObjectsToList, TArray<FString> Args, FString& ObjectsAvailable);	
@@ -46,7 +44,7 @@ public:
 	FString CommandNamespace = "default";
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) 
-	FString ListArgument = "list"; // TODO: Make this a CLI Processor
-
+	FString ListArgument = "list";
 	TMap<FString, TArray<FProcessCommandDelegate>> CommandProcessorMap;
+
 };

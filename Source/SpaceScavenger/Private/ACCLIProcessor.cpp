@@ -86,28 +86,24 @@ void UACCLIProcessor::UnregisterCommand(const FString Command, const FProcessCom
 }
 
 
-FString UACCLIProcessor::ProcessCommand(TArray<FString> Args)
+bool UACCLIProcessor::ProcessCommand(TArray<FString> Args, FString& Output)
 {
+	bool CommandRegistered = false;
 	if (Args.Num() > 0)
 	{
 		FString Final;
 		if (CommandProcessorMap.Contains(Args[0]))
 		{
+			CommandRegistered = true;
 			for (auto ProcessCommandDelegate : CommandProcessorMap[Args[0]])
 			{
 				if (!ProcessCommandDelegate.IsBound())
 					continue;
 				
 				FString CommandOutput;
-				TArray<FString> subArguments = TArray<FString>();
-				if (Args.Num() > 1)
-				{
-					subArguments.SetNumUninitialized(Args.Num()-1);
-					for(int i = 1; i < Args.Num(); i++)
-					{
-						subArguments[i - 1] = Args[i];
-					}
-				}
+				TArray<FString> subArguments = TArray(Args);
+				subArguments.RemoveAt(0);
+				
 				CommandOutput = ProcessCommandDelegate.Execute(subArguments);
 				if (CommandOutput.Len() > 0)
 					Final.Append(CommandOutput).Append("\n");
@@ -116,10 +112,10 @@ FString UACCLIProcessor::ProcessCommand(TArray<FString> Args)
 		if (Final.Len() > 0)
 		{
 			Final.RemoveFromEnd("\n");
-			return Final;
+			Output = Final;
 		}
 	}
-	return {"ERROR"};
+	return CommandRegistered;
 }
 
 bool UACCLIProcessor::ProcessListCommand(TArray<AAHackable*> ObjectsToList,

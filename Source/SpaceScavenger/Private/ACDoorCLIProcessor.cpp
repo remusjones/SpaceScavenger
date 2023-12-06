@@ -4,24 +4,30 @@
 #include "ACDoorCLIProcessor.h"
 #include "AHackable.h"
 
-FString UACDoorCLIProcessor::ProcessCommand(TArray<FString> Args)
+bool UACDoorCLIProcessor::ProcessCommand(TArray<FString> Args, FString& Output)
 {
-	if (FString ListOutput; ProcessListCommand(AccessibleInteractables, Args, ListOutput))
-		return ListOutput;
+	if (Super::ProcessCommand(Args, Output))
+		return true;
+	if (ProcessListCommand(AccessibleInteractables, Args, Output))
+		return true;
+	
 	
 	if (Args.Num() > 0)
 	{
 		for (const auto Hackable : AccessibleInteractables)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *Hackable->Identifier.ToString());
 			if (Hackable->Identifier.ToLower().ToString() == Args[0])
 			{
 				if (Hackable->TryInteract())
-					return FString::Printf(TEXT("Accessing Door: %s"), *Args[0]);
-				return FString::Printf(TEXT("Door Locked: %s"), *Args[0]);
+				{
+					Output = FString::Printf(TEXT("Accessing Door: %s"), *Args[0]);
+					
+				}
+				Output = FString::Printf(TEXT("Door Locked: %s"), *Args[0]);
 			}
 		}
-		return FString::Printf(TEXT("Door Inaccessable: %s"), *Args[0]);
+		Output = FString::Printf(TEXT("Door Inaccessable: %s"), *Args[0]);
 	}
-	return FString::Printf(TEXT("ERROR: Incorrect Args"));	
+	Output = FString::Printf(TEXT("ERROR: Incorrect Args"));
+	return true;	
 }
