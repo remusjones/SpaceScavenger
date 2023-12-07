@@ -96,19 +96,21 @@ void AAPlayerController::DetermineHover()
 	const FVector StartLocation = LineTraceOrigin->GetComponentLocation();
 
 	TArray<FHitResult> Results;
-	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + LineTraceOrigin->GetForwardVector() * LineTraceLength, FCollisionObjectQueryParams::DefaultObjectQueryParam);
+	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + LineTraceOrigin->GetForwardVector() * LineTraceLength, FCollisionObjectQueryParams::AllDynamicObjects);
 
 
 	AAInteractable* NewHoveredInteractable = nullptr;
 	for (auto HitResult : Results)
 	{
 		AActor* HitActor = HitResult.GetActor();
+	
 		if (HitActor == this)
 			continue;
-		
+
 		if (HitActor)
 		{
 			NewHoveredInteractable = Cast<AAInteractable>(HitActor);
+			
 			break;
 		}		
 	}
