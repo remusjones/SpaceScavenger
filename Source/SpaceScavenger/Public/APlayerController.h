@@ -48,7 +48,8 @@ public:
 	UInputAction* LookAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
 	UInputAction* InteractAction;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
+	UInputAction* CrouchAction;
 	
 	// Movement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
@@ -88,6 +89,7 @@ private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
+	void CrouchHandler(const FInputActionValue& Value);
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
 	

@@ -25,6 +25,7 @@ void AAPlayerController::BeginPlay()
 	MovementComponent->MaxWalkSpeed = WalkSpeed;
 	MovementComponent->MaxWalkSpeedCrouched = CrouchWalkSpeed;
 	MovementComponent->AirControl = AirControl;
+	MovementComponent->NavAgentProps.bCanCrouch = true;
 }
 
 // Called every frame
@@ -57,7 +58,9 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		Input->BindAction(LookAction, ETriggerEvent::Completed,this, &AAPlayerController::Look);
 
 		Input->BindAction(InteractAction, ETriggerEvent::Started, this, &AAPlayerController::Interact);
-		
+
+		Input->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAPlayerController::CrouchHandler);
+		Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAPlayerController::CrouchHandler);	
 	}
 }
 
@@ -89,6 +92,16 @@ void AAPlayerController::Interact(const FInputActionValue& Value)
 {
 	if (HoveredInteractable)
 		HackTool->TryInteract(HoveredInteractable);
+}
+
+void AAPlayerController::CrouchHandler(const FInputActionValue& Value)
+{
+	if (Value.Get<bool>())
+	{
+		Crouch();
+	}else
+		UnCrouch();
+		
 }
 
 void AAPlayerController::DetermineHover()
