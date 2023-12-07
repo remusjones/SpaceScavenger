@@ -62,7 +62,7 @@ public:
 
 	// Interaction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
-	USceneComponent* LineTraceOrigin;
+	USceneComponent* CameraReference;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	float LineTraceLength = 5;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
@@ -83,7 +83,8 @@ public:
 	float WalkSpeed = 300;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
 	float CrouchWalkSpeed = 150;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
+	float CrouchSpeed = 15.0f;
 	
 private:
 	void Move(const FInputActionValue& Value);
@@ -95,6 +96,13 @@ private:
 	
 	UPROPERTY()	
 	AAInteractable* HoveredInteractable;
-	
+
+
+	float DefaultCapsuleHalfHeight = 88.0f;
+	UPROPERTY() 
+	UCharacterMovementComponent* MovementComponent;
+	bool bIsCrouching = false;
+	UPROPERTY()
+	UCapsuleComponent* BodyCapsuleComponent;
 };
 

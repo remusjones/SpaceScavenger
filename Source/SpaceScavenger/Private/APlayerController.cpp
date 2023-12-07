@@ -5,6 +5,7 @@
 #include "AInteractable.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -21,18 +22,28 @@ void AAPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	const auto MovementComponent = GetCharacterMovement();
+	MovementComponent = GetCharacterMovement();
 	MovementComponent->MaxWalkSpeed = WalkSpeed;
 	MovementComponent->MaxWalkSpeedCrouched = CrouchWalkSpeed;
 	MovementComponent->AirControl = AirControl;
 	MovementComponent->NavAgentProps.bCanCrouch = true;
+	BodyCapsuleComponent = GetCapsuleComponent(); 
+	DefaultCapsuleHalfHeight = BodyCapsuleComponent->GetUnscaledCapsuleHalfHeight();
+
+	
+	RecalculateCrouchedEyeHeight();
 }
 
 // Called every frame
 void AAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	DetermineHover();	
+	DetermineHover();
+
+	if (bIsCrouching)
+		BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(BodyCapsuleComponent->GetScaledCapsuleHalfHeight(), CrouchedEyeHeight, CrouchSpeed * DeltaTime));
+	else 
+		BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(BodyCapsuleComponent->GetScaledCapsuleHalfHeight(), DefaultCapsuleHalfHeight, CrouchSpeed * DeltaTime));
 }
 
 
@@ -96,20 +107,15 @@ void AAPlayerController::Interact(const FInputActionValue& Value)
 
 void AAPlayerController::CrouchHandler(const FInputActionValue& Value)
 {
-	if (Value.Get<bool>())
-	{
-		Crouch();
-	}else
-		UnCrouch();
-		
+	bIsCrouching = Value.Get<bool>();
 }
 
 void AAPlayerController::DetermineHover()
 {
-	const FVector StartLocation = LineTraceOrigin->GetComponentLocation();
+	const FVector StartLocation = CameraReference->GetComponentLocation();
 
 	TArray<FHitResult> Results;
-	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + LineTraceOrigin->GetForwardVector() * LineTraceLength, FCollisionObjectQueryParams::AllDynamicObjects);
+	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + CameraReference->GetForwardVector() * LineTraceLength, FCollisionObjectQueryParams::AllDynamicObjects);
 
 
 	AAInteractable* NewHoveredInteractable = nullptr;
