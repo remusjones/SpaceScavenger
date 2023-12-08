@@ -93,7 +93,6 @@ private:
 	void CrouchHandler(const FInputActionValue& Value);
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
-	float EaseInSine(float num);	
 	UPROPERTY()	
 	AAInteractable* HoveredInteractable;
 

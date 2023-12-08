@@ -3,6 +3,7 @@
 
 #include "AHackTool.h"
 #include "AInteractable.h"
+#include "EasingFunctions.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -42,17 +43,11 @@ void AAPlayerController::Tick(float DeltaTime)
 	DetermineHover();
 
 	if (bIsCrouching)
-	{
 		CrouchNorm = FMathf::Clamp(CrouchNorm - (CrouchSpeed * DeltaTime), 0, 1);
-		BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, EaseInSine(CrouchNorm)));
-	}
-	
-	else
-	{
-		
+	else		
 		CrouchNorm = FMathf::Clamp(CrouchNorm + (CrouchSpeed * DeltaTime), 0, 1);
-		BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, EaseInSine(CrouchNorm)));
-	}
+	
+	BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, UEasingFunctions::EaseOutQuart(CrouchNorm)));
 }
 
 
@@ -154,9 +149,4 @@ void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
 		HoveredInteractable = Interactable;
 		HoveredChangedDelegate.Broadcast(Interactable);
 	}
-}
-
-float AAPlayerController::EaseInSine(float num)
-{
-	return 1 - FMath::Cos((num * UE_PI) /2);
 }
