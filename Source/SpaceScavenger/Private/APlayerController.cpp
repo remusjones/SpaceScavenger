@@ -34,6 +34,7 @@ void AAPlayerController::BeginPlay()
 	RecalculateCrouchedEyeHeight();
 }
 
+
 // Called every frame
 void AAPlayerController::Tick(float DeltaTime)
 {
@@ -41,9 +42,17 @@ void AAPlayerController::Tick(float DeltaTime)
 	DetermineHover();
 
 	if (bIsCrouching)
-		BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(BodyCapsuleComponent->GetScaledCapsuleHalfHeight(), CrouchedEyeHeight, CrouchSpeed * DeltaTime));
-	else 
-		BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(BodyCapsuleComponent->GetScaledCapsuleHalfHeight(), DefaultCapsuleHalfHeight, CrouchSpeed * DeltaTime));
+	{
+		CrouchNorm = FMathf::Clamp(CrouchNorm - (CrouchSpeed * DeltaTime), 0, 1);
+		BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, EaseInSine(CrouchNorm)));
+	}
+	
+	else
+	{
+		
+		CrouchNorm = FMathf::Clamp(CrouchNorm + (CrouchSpeed * DeltaTime), 0, 1);
+		BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, EaseInSine(CrouchNorm)));
+	}
 }
 
 
@@ -145,4 +154,9 @@ void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
 		HoveredInteractable = Interactable;
 		HoveredChangedDelegate.Broadcast(Interactable);
 	}
+}
+
+float AAPlayerController::EaseInSine(float num)
+{
+	return 1 - FMath::Cos((num * UE_PI) /2);
 }

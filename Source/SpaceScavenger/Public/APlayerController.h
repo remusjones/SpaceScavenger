@@ -93,11 +93,11 @@ private:
 	void CrouchHandler(const FInputActionValue& Value);
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
-	
+	float EaseInSine(float num);	
 	UPROPERTY()	
 	AAInteractable* HoveredInteractable;
 
-
+	float CrouchNorm = 1.0f;
 	float DefaultCapsuleHalfHeight = 88.0f;
 	UPROPERTY() 
 	UCharacterMovementComponent* MovementComponent;
@@ -105,4 +105,3 @@ private:
 	UPROPERTY()
 	UCapsuleComponent* BodyCapsuleComponent;
 };
-
