@@ -86,6 +86,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
 	float CrouchSpeed = 15.0f;
 	
+	UPROPERTY(BlueprintReadOnly)	
+	AAInteractable* HoveredInteractable;
 private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -93,8 +95,7 @@ private:
 	void CrouchHandler(const FInputActionValue& Value);
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
-	UPROPERTY()	
-	AAInteractable* HoveredInteractable;
+
 
 	float CrouchNorm = 1.0f;
 	float DefaultCapsuleHalfHeight = 88.0f;

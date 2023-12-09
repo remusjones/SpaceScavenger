@@ -86,14 +86,17 @@ public:
 
 	UPROPERTY()
 	float InterpFloatCurve;
-
-	
+	UPROPERTY(BlueprintReadOnly)
+	bool IsHacking;
+	UPROPERTY(BlueprintReadOnly)	
+	AAHackable* CurrentHackable;
+	UPROPERTY(BlueprintReadOnly)
+	AAInteractable* LastHovered;
 private:
 
 	// Cached Variables
 	EToolState ActiveToolState = EToolState::Idle;
-	AAHackable* CurrentHackable;
-	AAInteractable* LastHovered;
+	UPROPERTY()
 	UTimelineComponent* HackingTimeline;
 	
 };

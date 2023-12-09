@@ -21,6 +21,7 @@ void AAHackTool::BeginPlay()
 	Super::BeginPlay();
 	ConfigureTimeline();
 }
+
 void AAHackTool::ConfigureTimeline()
 {
 
@@ -110,6 +111,7 @@ void AAHackTool::InterruptHacking()
 	ActiveToolState = EToolState::Idle;
 	UpdateDisplay(LastHovered);
 	HackingTimeline->Stop();
+	IsHacking = false;
 }
 
 void AAHackTool::HackingTick(const float HackPercentage)
@@ -138,5 +140,6 @@ void AAHackTool::BeginHacking(AAHackable* TargetHackable)
 	}
 	HackingTimeline->SetTimelineLength(TargetHackable->HackDifficulty);
 	HackingTimeline->PlayFromStart();
+	IsHacking = true;
 }
 
