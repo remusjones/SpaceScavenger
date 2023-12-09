@@ -47,7 +47,7 @@ void AAPlayerController::Tick(float DeltaTime)
 	else		
 		CrouchNorm = FMathf::Clamp(CrouchNorm + (CrouchSpeed * DeltaTime), 0, 1);
 	
-	BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, UEasingFunctions::EaseOutQuart(CrouchNorm)));
+	BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, UEasingFunctions::EaseInOutExpo(CrouchNorm)));
 }
 
 
