@@ -3,8 +3,10 @@
 
 #include "AHackTool.h"
 #include "AInteractable.h"
+#include "EasingFunctions.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -21,17 +23,31 @@ void AAPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	const auto MovementComponent = GetCharacterMovement();
+	MovementComponent = GetCharacterMovement();
 	MovementComponent->MaxWalkSpeed = WalkSpeed;
 	MovementComponent->MaxWalkSpeedCrouched = CrouchWalkSpeed;
 	MovementComponent->AirControl = AirControl;
+	MovementComponent->NavAgentProps.bCanCrouch = true;
+	BodyCapsuleComponent = GetCapsuleComponent(); 
+	DefaultCapsuleHalfHeight = BodyCapsuleComponent->GetUnscaledCapsuleHalfHeight();
+
+	
+	RecalculateCrouchedEyeHeight();
 }
+
 
 // Called every frame
 void AAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	DetermineHover();	
+	DetermineHover();
+
+	if (bIsCrouching)
+		CrouchNorm = FMathf::Clamp(CrouchNorm - (CrouchSpeed * DeltaTime), 0, 1);
+	else		
+		CrouchNorm = FMathf::Clamp(CrouchNorm + (CrouchSpeed * DeltaTime), 0, 1);
+	
+	BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, UEasingFunctions::EaseInOutExpo(CrouchNorm)));
 }
 
 
@@ -57,7 +73,9 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		Input->BindAction(LookAction, ETriggerEvent::Completed,this, &AAPlayerController::Look);
 
 		Input->BindAction(InteractAction, ETriggerEvent::Started, this, &AAPlayerController::Interact);
-		
+
+		Input->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAPlayerController::CrouchHandler);
+		Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAPlayerController::CrouchHandler);	
 	}
 }
 
@@ -91,23 +109,37 @@ void AAPlayerController::Interact(const FInputActionValue& Value)
 		HackTool->TryInteract(HoveredInteractable);
 }
 
+void AAPlayerController::CrouchHandler(const FInputActionValue& Value)
+{
+	bIsCrouching = Value.Get<bool>();
+}
+
 void AAPlayerController::DetermineHover()
 {
-	const FVector StartLocation = LineTraceOrigin->GetComponentLocation();
-	FHitResult HitResult;
-	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation,
-		StartLocation + LineTraceOrigin->GetForwardVector() * LineTraceLength,
-		ECC_WorldDynamic);
+	const FVector StartLocation = CameraReference->GetComponentLocation();
+
+	TArray<FHitResult> Results;
+	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + CameraReference->GetForwardVector() * LineTraceLength, FCollisionObjectQueryParams::AllDynamicObjects);
+
+
 	AAInteractable* NewHoveredInteractable = nullptr;
-	
-	if (HitResult.GetActor())
+	for (auto HitResult : Results)
 	{
-		NewHoveredInteractable = Cast<AAInteractable>(
-			HitResult.GetActor());
+		AActor* HitActor = HitResult.GetActor();
+	
+		if (HitActor == this)
+			continue;
+
+		if (HitActor)
+		{
+			NewHoveredInteractable = Cast<AAInteractable>(HitActor);
+			
+			break;
+		}		
 	}
 
 	ChangeHoveredInteractable(NewHoveredInteractable);
-	HackTool->UpdateDisplay(NewHoveredInteractable);	
+	HackTool->UpdateDisplay(NewHoveredInteractable);
 }
 
 void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)

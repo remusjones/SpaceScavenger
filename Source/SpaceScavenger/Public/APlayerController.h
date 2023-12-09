@@ -48,7 +48,8 @@ public:
 	UInputAction* LookAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
 	UInputAction* InteractAction;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
+	UInputAction* CrouchAction;
 	
 	// Movement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
@@ -61,7 +62,7 @@ public:
 
 	// Interaction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
-	USceneComponent* LineTraceOrigin;
+	USceneComponent* CameraReference;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	float LineTraceLength = 5;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
@@ -82,17 +83,24 @@ public:
 	float WalkSpeed = 300;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
 	float CrouchWalkSpeed = 150;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
+	float CrouchSpeed = 15.0f;
 	
 private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
+	void CrouchHandler(const FInputActionValue& Value);
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
-	
 	UPROPERTY()	
 	AAInteractable* HoveredInteractable;
-	
-};
 
+	float CrouchNorm = 1.0f;
+	float DefaultCapsuleHalfHeight = 88.0f;
+	UPROPERTY() 
+	UCharacterMovementComponent* MovementComponent;
+	bool bIsCrouching = false;
+	UPROPERTY()
+	UCapsuleComponent* BodyCapsuleComponent;
+};
