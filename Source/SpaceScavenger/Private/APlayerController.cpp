@@ -42,6 +42,17 @@ void AAPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	DetermineHover();
 
+	if (bIsEva)
+	{
+		MovementComponent->GravityScale = 0;
+		MovementComponent->SetMovementMode(MOVE_Flying);
+	}
+	else
+	{
+		MovementComponent->SetMovementMode(MOVE_Walking);
+		MovementComponent->GravityScale = 1;
+	}
+	
 	if (bIsCrouching)
 		CrouchNorm = FMathf::Clamp(CrouchNorm - (CrouchSpeed * DeltaTime), 0, 1);
 	else		
@@ -67,7 +78,7 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered,this, &AAPlayerController::Move);
 		Input->BindAction(MoveAction, ETriggerEvent::Completed,this, &AAPlayerController::Move);
 		
-		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &Super::Jump);
+		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AAPlayerController::JumpHandler);
 		
 		Input->BindAction(LookAction, ETriggerEvent::Triggered,this, &AAPlayerController::Look);
 		Input->BindAction(LookAction, ETriggerEvent::Completed,this, &AAPlayerController::Look);
@@ -91,7 +102,14 @@ void AAPlayerController::Move(const FInputActionValue& Value)
 	MovementVector = FVector(ForwardMoveVector.X + RightMoveVector.X,
 		ForwardMoveVector.Y + RightMoveVector.Y,0);
 	MovementVector.Normalize();
-	AddMovementInput(MovementVector);
+	if (bIsEva)
+	{
+		MovementVector *= AirControl;
+		AddMovementInput(MovementVector);
+		//AddMovementInput(MovementVector);
+	}else
+		AddMovementInput(MovementVector);
+		
 }
 
 void AAPlayerController::Look(const FInputActionValue& Value)
@@ -109,9 +127,23 @@ void AAPlayerController::Interact(const FInputActionValue& Value)
 		HackTool->TryInteract(HoveredInteractable);
 }
 
+void AAPlayerController::JumpHandler(const FInputActionValue& Value)
+{
+	if (!bIsEva)
+		Super::Jump();
+	else
+	{
+		AddMovementInput(FVector(0,0, AirControl));
+	}
+}
+
 void AAPlayerController::CrouchHandler(const FInputActionValue& Value)
 {
 	bIsCrouching = Value.Get<bool>();
+	if (bIsEva)
+	{
+		AddMovementInput(FVector(0,0, -AirControl));
+	}
 }
 
 void AAPlayerController::DetermineHover()
