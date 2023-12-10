@@ -31,7 +31,8 @@ enum class EHackableState : uint8 {
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackPercentageDelegate, float, HackPercentage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDisplayTextChangedDelegate, FText, DisplayText);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackFinished, bool, Succeeded);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHackStarted);
 UCLASS()
 class SPACESCAVENGER_API AAHackTool : public AActor
 {
@@ -82,18 +83,24 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FDisplayTextChangedDelegate DisplayTextChangedDelegate;
-
-
+	UPROPERTY(BlueprintAssignable)
+	FHackFinished HackFinishedDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FHackStarted HackStartedDelegate;
+	
 	UPROPERTY()
 	float InterpFloatCurve;
-
-	
+	UPROPERTY(BlueprintReadOnly)
+	bool IsHacking;
+	UPROPERTY(BlueprintReadOnly)	
+	AAHackable* CurrentHackable;
+	UPROPERTY(BlueprintReadOnly)
+	AAInteractable* LastHovered;
 private:
 
 	// Cached Variables
 	EToolState ActiveToolState = EToolState::Idle;
-	AAHackable* CurrentHackable;
-	AAInteractable* LastHovered;
+	UPROPERTY()
 	UTimelineComponent* HackingTimeline;
 	
 };
