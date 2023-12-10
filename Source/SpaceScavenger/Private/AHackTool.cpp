@@ -111,9 +111,10 @@ void AAHackTool::InterruptHacking()
 	ActiveToolState = EToolState::Idle;
 	UpdateDisplay(LastHovered);
 	
-	if (HackingTimeline->IsPlaying() && HackInterruptedDelegate.IsBound())
-		HackInterruptedDelegate.Broadcast();
-	
+	if (HackingTimeline->IsPlaying() && HackFinishedDelegate.IsBound())
+		HackFinishedDelegate.Broadcast(false);
+	else 
+		HackFinishedDelegate.Broadcast(true);	
 	HackingTimeline->Stop();
 	IsHacking = false;
 }
@@ -145,5 +146,7 @@ void AAHackTool::BeginHacking(AAHackable* TargetHackable)
 	HackingTimeline->SetTimelineLength(TargetHackable->HackDifficulty);
 	HackingTimeline->PlayFromStart();
 	IsHacking = true;
+	if (HackStartedDelegate.IsBound())
+		HackStartedDelegate.Broadcast();
 }
 
