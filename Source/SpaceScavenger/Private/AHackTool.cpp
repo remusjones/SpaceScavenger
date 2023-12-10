@@ -110,6 +110,10 @@ void AAHackTool::InterruptHacking()
 	CurrentHackable = nullptr;
 	ActiveToolState = EToolState::Idle;
 	UpdateDisplay(LastHovered);
+	
+	if (HackingTimeline->IsPlaying() && HackInterruptedDelegate.IsBound())
+		HackInterruptedDelegate.Broadcast();
+	
 	HackingTimeline->Stop();
 	IsHacking = false;
 }

@@ -31,7 +31,7 @@ enum class EHackableState : uint8 {
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackPercentageDelegate, float, HackPercentage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDisplayTextChangedDelegate, FText, DisplayText);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHackInterrupted);
 UCLASS()
 class SPACESCAVENGER_API AAHackTool : public AActor
 {
@@ -82,7 +82,8 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FDisplayTextChangedDelegate DisplayTextChangedDelegate;
-
+	UPROPERTY(BlueprintAssignable)
+	FHackInterrupted HackInterruptedDelegate;
 
 	UPROPERTY()
 	float InterpFloatCurve;

@@ -19,6 +19,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInSine(const float Input);
 
 	/**
@@ -26,6 +27,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutSine(const float Input);
 
 	/**
@@ -33,6 +35,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutSine(const float Input);
 
 	/**
@@ -40,6 +43,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInQuad(const float Input);
 
 	/**
@@ -47,6 +51,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutQuad(const float Input);
 	
 	/**
@@ -54,6 +59,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutQuad(const float Input);
 
 	/**
@@ -61,6 +67,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInCubic(const float Input);
 
 	/**
@@ -68,6 +75,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutCubic(const float Input);
 
 	/**
@@ -75,6 +83,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutCubic(const float Input);
 
 	/**
@@ -82,6 +91,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInQuart(const float Input);
 	
 	/**
@@ -89,6 +99,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutQuart(const float Input);
 	
 	/**
@@ -96,6 +107,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutQuart(const float Input);
 
 	/**
@@ -103,18 +115,21 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInQuint(const float Input);
 	/**
 	 * @brief https://easings.net/#easeOutQuint   
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutQuint(const float Input);
 	/**
 	 * @brief https://easings.net/#easeInOutQuint  
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutQuint(const float Input);
 
 	/**
@@ -122,6 +137,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInExpo(const float Input);
 	
 	/**
@@ -129,6 +145,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutExpo(const float Input);
 	
 	/**
@@ -136,6 +153,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutExpo(const float Input);
 
 	/**
@@ -143,20 +161,21 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
-	
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInCirc(const float Input);
 	/**
 	 * @brief https://easings.net/#easeOutCirc   
 	 * @param Input 
 	 * @return 
 	 */
-	
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutCirc(const float Input);
 	/**
 	 * @brief https://easings.net/#easeInOutCirc  
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutCirc(const float Input);
 
 	/**
@@ -164,6 +183,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInBack(const float Input);
 	
 	/**
@@ -171,6 +191,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutBack(const float Input);
 	
 	/**
@@ -178,6 +199,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutBack(const float Input);
 	
 	/**
@@ -185,6 +207,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInElastic(const float Input);
 	
 	/**
@@ -192,6 +215,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutElastic(const float Input);
 	
 	/**
@@ -199,6 +223,7 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutElastic(const float Input);
 	
 	/**
@@ -206,18 +231,21 @@ public:
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInBounce(const float Input);
 	/**
 	 * @brief https://easings.net/#easeOutBounce    
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseOutBounce(const float Input);
 	/**
 	 * @brief https://easings.net/#easeInOutBounce    
 	 * @param Input 
 	 * @return 
 	 */
+	UFUNCTION(BlueprintCallable, Category="Easings")
 	static float EaseInOutBounce(const float Input);
 
 };
