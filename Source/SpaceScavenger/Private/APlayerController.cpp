@@ -40,6 +40,11 @@ void AAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	DetermineHover();
+
+
+	const bool IsGravityNull = MovementComponent->GetGravityZ() == 0.0f;
+	if (IsGravityNull != bIsEva)
+		ToggleEva();
 	
 	if (bIsCrouching)
 		CrouchNorm = FMathf::Clamp(CrouchNorm - (CrouchSpeed * DeltaTime), 0, 1);

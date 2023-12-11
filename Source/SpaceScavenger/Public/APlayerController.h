@@ -37,7 +37,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	void SetEva(bool EvaState);
-	UFUNCTION(BlueprintCallable, CallInEditor, Category="Debug")
 	void ToggleEva();
 	// Input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
@@ -58,9 +57,6 @@ public:
 	FVector MovementVector;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	FVector RotationVector;	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-	USceneComponent* Test;	
-	
 
 	// Interaction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
