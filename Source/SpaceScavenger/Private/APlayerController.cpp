@@ -35,23 +35,11 @@ void AAPlayerController::BeginPlay()
 	RecalculateCrouchedEyeHeight();
 }
 
-
 // Called every frame
 void AAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	DetermineHover();
-
-	if (bIsEva)
-	{
-		MovementComponent->GravityScale = 0;
-		MovementComponent->SetMovementMode(MOVE_Flying);
-	}
-	else
-	{
-		MovementComponent->SetMovementMode(MOVE_Walking);
-		MovementComponent->GravityScale = 1;
-	}
 	
 	if (bIsCrouching)
 		CrouchNorm = FMathf::Clamp(CrouchNorm - (CrouchSpeed * DeltaTime), 0, 1);
@@ -60,7 +48,6 @@ void AAPlayerController::Tick(float DeltaTime)
 	
 	BodyCapsuleComponent->SetCapsuleHalfHeight(FMath::Lerp(CrouchedEyeHeight,DefaultCapsuleHalfHeight, UEasingFunctions::EaseInOutExpo(CrouchNorm)));
 }
-
 
 // Called to bind functionality to input
 void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -87,6 +74,21 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		Input->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAPlayerController::CrouchHandler);
 		Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAPlayerController::CrouchHandler);	
+	}
+}
+
+void AAPlayerController::SetEva(const bool EvaState)
+{
+	bIsEva = EvaState;
+	if (bIsEva)
+	{
+		MovementComponent->GravityScale = 0;
+		MovementComponent->SetMovementMode(MOVE_Flying);
+	}
+	else
+	{
+		MovementComponent->SetMovementMode(MOVE_Walking);
+		MovementComponent->GravityScale = 1;
 	}
 }
 
@@ -132,18 +134,14 @@ void AAPlayerController::JumpHandler(const FInputActionValue& Value)
 	if (!bIsEva)
 		Super::Jump();
 	else
-	{
 		AddMovementInput(FVector(0,0, AirControl));
-	}
 }
 
 void AAPlayerController::CrouchHandler(const FInputActionValue& Value)
 {
 	bIsCrouching = Value.Get<bool>();
 	if (bIsEva)
-	{
 		AddMovementInput(FVector(0,0, -AirControl));
-	}
 }
 
 void AAPlayerController::DetermineHover()
