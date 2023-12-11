@@ -79,6 +79,9 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AAPlayerController::SetEva(const bool EvaState)
 {
+	if (MovementComponent == nullptr)
+		return;
+	
 	bIsEva = EvaState;
 	if (bIsEva)
 	{
@@ -90,6 +93,11 @@ void AAPlayerController::SetEva(const bool EvaState)
 		MovementComponent->SetMovementMode(MOVE_Walking);
 		MovementComponent->GravityScale = 1;
 	}
+}
+
+void AAPlayerController::ToggleEva()
+{
+	SetEva(!bIsEva);
 }
 
 void AAPlayerController::Move(const FInputActionValue& Value)
@@ -106,9 +114,7 @@ void AAPlayerController::Move(const FInputActionValue& Value)
 	MovementVector.Normalize();
 	if (bIsEva)
 	{
-		MovementVector *= AirControl;
-		AddMovementInput(MovementVector);
-		//AddMovementInput(MovementVector);
+		MovementComponent->AddForce(MovementVector * EvaMovementSpeed);
 	}else
 		AddMovementInput(MovementVector);
 		
@@ -134,14 +140,14 @@ void AAPlayerController::JumpHandler(const FInputActionValue& Value)
 	if (!bIsEva)
 		Super::Jump();
 	else
-		AddMovementInput(FVector(0,0, AirControl));
+		MovementComponent->AddForce(FVector(0,0, AirControl * EvaMovementSpeed));
 }
 
 void AAPlayerController::CrouchHandler(const FInputActionValue& Value)
 {
 	bIsCrouching = Value.Get<bool>();
 	if (bIsEva)
-		AddMovementInput(FVector(0,0, -AirControl));
+		MovementComponent->AddForce(FVector(0,0, AirControl * -EvaMovementSpeed));
 }
 
 void AAPlayerController::DetermineHover()

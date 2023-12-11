@@ -37,7 +37,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	void SetEva(bool EvaState);
-	
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Debug")
+	void ToggleEva();
 	// Input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	UInputMappingContext* InputMapping;
@@ -101,7 +102,7 @@ private:
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
 
-
+	float EvaMovementSpeed = 10000;
 	float CrouchNorm = 1.0f;
 	float DefaultCapsuleHalfHeight = 88.0f;
 	UPROPERTY() 
