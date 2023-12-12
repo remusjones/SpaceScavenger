@@ -42,7 +42,7 @@ void AAPlayerController::Tick(float DeltaTime)
 	DetermineHover();
 
 
-	const bool IsGravityNull = MovementComponent->GetGravityZ() == 0.0f;
+	const bool IsGravityNull = !BodyCapsuleComponent->IsGravityEnabled();
 	if (IsGravityNull != bIsEva)
 		ToggleEva();
 	
