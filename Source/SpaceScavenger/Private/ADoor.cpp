@@ -29,25 +29,19 @@ void AADoor::Toggle()
 {
 	bState = !bState;
 	if (DoorStateChangedDelegate.IsBound())
-	{
 		DoorStateChangedDelegate.Broadcast(bState);
-	}
 }
 
 void AADoor::Open()
 {
 	if (!bState)
-	{
 		Toggle();
-	}
 }
 
 void AADoor::Close()
 {
 	if (bState)
-	{
 		Toggle();
-	}
 }
 
 void AADoor::SetState(const bool NewState)

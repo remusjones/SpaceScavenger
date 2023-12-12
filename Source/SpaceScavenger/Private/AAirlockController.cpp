@@ -58,9 +58,10 @@ void AAAirlockController::CycleAirlock()
 			break;
 		default: ;
 		
-		ExternalAirlock->Close();
-		InternalAirlock->Close();
+
 	}
+	ExternalAirlock->Close();
+	InternalAirlock->Close();
 	if (AirlockStateChangedDelegate.IsBound())
 		AirlockStateChangedDelegate.Broadcast(ECurrentAirlockState);
 }

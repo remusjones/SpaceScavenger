@@ -33,7 +33,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, CallInEditor)
 	void CycleAirlock();
 	void FinalizeStateChange();
 	
@@ -42,7 +42,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float AirlockOxygenCycleTime = 5.0f;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)                                             
 	AADoor* ExternalAirlock;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	AADoor* InternalAirlock;
