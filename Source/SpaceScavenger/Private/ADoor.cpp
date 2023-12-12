@@ -38,9 +38,7 @@ void AADoor::Open()
 {
 	if (!bState)
 	{
-		bState = !bState;
-		if (DoorStateChangedDelegate.IsBound())
-			DoorStateChangedDelegate.Broadcast(bState);
+		Toggle();
 	}
 }
 
@@ -48,9 +46,7 @@ void AADoor::Close()
 {
 	if (bState)
 	{
-		bState = !bState;
-		if (DoorStateChangedDelegate.IsBound())
-			DoorStateChangedDelegate.Broadcast(bState);
+		Toggle();
 	}
 }
 

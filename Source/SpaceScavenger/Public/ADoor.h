@@ -34,7 +34,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetState(bool NewState);
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere	)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bState = true;
 
 	UPROPERTY(BlueprintAssignable)
