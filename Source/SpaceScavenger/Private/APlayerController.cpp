@@ -116,7 +116,9 @@ void AAPlayerController::Move(const FInputActionValue& Value)
 	//
 	MovementVector = FVector(ForwardMoveVector.X + RightMoveVector.X,
 		ForwardMoveVector.Y + RightMoveVector.Y,0);
-	MovementVector.Normalize();
+	if (MovementVector.Length() > 0)
+		MovementVector/=2;
+
 	if (bIsEva)
 	{
 		MovementComponent->AddForce(MovementVector * EvaMovementSpeed);
