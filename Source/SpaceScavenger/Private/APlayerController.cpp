@@ -164,7 +164,6 @@ void AAPlayerController::DetermineHover()
 	TArray<FHitResult> Results;
 	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + CameraReference->GetForwardVector() * LineTraceLength, FCollisionObjectQueryParams::AllDynamicObjects);
 
-
 	AAInteractable* NewHoveredInteractable = nullptr;
 	for (auto HitResult : Results)
 	{
