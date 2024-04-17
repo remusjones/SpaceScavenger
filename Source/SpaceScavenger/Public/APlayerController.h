@@ -5,6 +5,7 @@
 
 #include "InputActionValue.h"
 #include "CoreMinimal.h"
+#include "EnhancedInputComponent.h"
 #include "GameFramework/Character.h"
 #include "APlayerController.generated.h"
 
@@ -36,6 +37,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	void ConfigureEvaMovement();
+	void ConfigureRegularMovement();
 	void SetEva(bool EvaState);
 	void ToggleEva();
 	// Input
@@ -91,10 +94,13 @@ public:
 	
 private:
 	void Move(const FInputActionValue& Value);
+	void MoveEva(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
 	void JumpHandler(const FInputActionValue& Value);
+	void JumpHandlerEva(const FInputActionValue& Value);
 	void CrouchHandler(const FInputActionValue& Value);
+	void CrouchHandlerEva(const FInputActionValue& Value);
 	void DetermineHover();
 	void ChangeHoveredInteractable(AAInteractable* Interactable);
 
@@ -106,4 +112,15 @@ private:
 	bool bIsCrouching = false;
 	UPROPERTY()
 	UCapsuleComponent* BodyCapsuleComponent;
+
+	
+	TArray<FEnhancedInputActionEventBinding*> DynamicMovementBindings;
+
+	FInputActionBinding MoveBinding;
+	FInputActionBinding JumpBinding;
+	FInputActionBinding CrouchBinding;
+	FInputActionBinding InteractBinding;
+	FInputActionBinding LookBinding;
+
+	
 };
