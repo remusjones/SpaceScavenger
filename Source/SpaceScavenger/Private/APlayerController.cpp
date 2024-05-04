@@ -1,11 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "APlayerController.h"
-
-#include "AHackTool.h"
 #include "AInteractable.h"
 #include "EasingFunctions.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "IPlayerTool.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -199,8 +198,8 @@ void AAPlayerController::Look(const FInputActionValue& Value)
 
 void AAPlayerController::Interact(const FInputActionValue& Value)
 {
-	if (HoveredInteractable)
-		HackTool->TryInteract(HoveredInteractable);
+	if (ActiveTool)
+		ActiveTool->Use();
 }
 
 void AAPlayerController::JumpHandler(const FInputActionValue& Value)
@@ -247,7 +246,9 @@ void AAPlayerController::DetermineHover()
 	}
 
 	ChangeHoveredInteractable(NewHoveredInteractable);
-	HackTool->UpdateDisplay(NewHoveredInteractable);
+	
+	if (ActiveTool)
+		ActiveTool->UpdateHoveredInteractable(NewHoveredInteractable);
 }
 
 void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)

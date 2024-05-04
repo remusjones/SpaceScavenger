@@ -2,7 +2,6 @@
 
 
 #include "AHackTool.h"
-
 #include "AHackable.h"
 #include "AInteractable.h"
 #include "Components/TimelineComponent.h"
@@ -59,7 +58,6 @@ void AAHackTool::Tick(float DeltaTime)
 
 void AAHackTool::UpdateDisplay(AAInteractable* HoveredInteractable)
 {
-	LastHovered = HoveredInteractable;
 
 	if (ActiveToolState != EToolState::Idle)
 		return;
@@ -118,6 +116,26 @@ void AAHackTool::InterruptHacking()
 	HackingTimeline->Stop();
 	IsHacking = false;
 }
+
+void AAHackTool::Use()
+{
+	TryInteract(LastHovered);
+}
+
+void AAHackTool::UseHold()
+{
+}
+
+void AAHackTool::UseRelease()
+{
+}
+
+void AAHackTool::UpdateHoveredInteractable(AAInteractable* hoveredInteractable)
+{
+	LastHovered = hoveredInteractable;
+	UpdateDisplay(hoveredInteractable);
+}
+
 
 void AAHackTool::HackingTick(const float HackPercentage)
 {

@@ -9,10 +9,10 @@
 #include "GameFramework/Character.h"
 #include "APlayerController.generated.h"
 
+class IIPlayerTool;
 class UInputMappingContext;
 class UInputAction;
 class AAInteractable;
-class AAHackTool;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHoveredChangedDelegate, AAInteractable*, HoveredInteractable);
@@ -66,9 +66,9 @@ public:
 	USceneComponent* CameraReference;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	float LineTraceLength = 5;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
-	AAHackTool* HackTool; // Hack tool
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	TScriptInterface<IIPlayerTool> ActiveTool;
 	
 	// Delegates
 	UPROPERTY(BlueprintAssignable)
