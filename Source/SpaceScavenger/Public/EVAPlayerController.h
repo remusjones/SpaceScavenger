@@ -7,25 +7,25 @@
 #include "CoreMinimal.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/Character.h"
-#include "APlayerController.generated.h"
+#include "EVAPlayerController.generated.h"
 
 class IIPlayerTool;
 class UInputMappingContext;
 class UInputAction;
-class AAInteractable;
+class AInteractable;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractedDelegate);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHoveredChangedDelegate, AAInteractable*, HoveredInteractable);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackingDelegate, AAInteractable*, TargetInteractable);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHoveredChangedDelegate, AInteractable*, HoveredInteractable);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackingDelegate, AInteractable*, TargetInteractable);
 //
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class SPACESCAVENGER_API AAPlayerController : public ACharacter
+class SPACESCAVENGER_API AEVAPlayerController : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	AAPlayerController();
+	AEVAPlayerController();
 
 protected:
 	// Called when the game starts or when spawned
@@ -89,7 +89,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
 	bool bIsEva = false;
 	UPROPERTY(BlueprintReadOnly)	
-	AAInteractable* HoveredInteractable;
+	AInteractable* HoveredInteractable;
 
 	
 private:
@@ -102,7 +102,7 @@ private:
 	void CrouchHandler(const FInputActionValue& Value);
 	void CrouchHandlerEva(const FInputActionValue& Value);
 	void DetermineHover();
-	void ChangeHoveredInteractable(AAInteractable* Interactable);
+	void ChangeHoveredInteractable(AInteractable* Interactable);
 
 	float EvaMovementSpeed = 10000;
 	float CrouchNorm = 1.0f;

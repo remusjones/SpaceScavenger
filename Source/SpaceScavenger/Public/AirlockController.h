@@ -3,7 +3,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "AAirlockController.generated.h"
+#include "AirlockController.generated.h"
 
 UENUM(BlueprintType)
 enum EAirlockState 
@@ -13,17 +13,17 @@ enum EAirlockState
 	AirlockCycling
 };
 
-class AADoor;
+class ADoor;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAirlockStateChangedDelegate, EAirlockState, AirlockState);
 UCLASS()
-class SPACESCAVENGER_API AAAirlockController : public AActor
+class SPACESCAVENGER_API AAirlockController : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AAAirlockController();
+	AAirlockController();
 
 protected:
 	// Called when the game starts or when spawned
@@ -43,9 +43,9 @@ public:
 	float AirlockOxygenCycleTime = 5.0f;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)                                             
-	AADoor* ExternalAirlock;
+	ADoor* ExternalAirlock;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	AADoor* InternalAirlock;
+	ADoor* InternalAirlock;
 
 	UPROPERTY(EditAnywhere)
 	TEnumAsByte<EAirlockState> ECurrentAirlockState;

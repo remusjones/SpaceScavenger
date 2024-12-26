@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AInteractable.h"
+#include "Interactable.h"
 #include "GameFramework/Actor.h"
-#include "AHackable.generated.h"
+#include "Hackable.generated.h"
 
 
 
@@ -13,13 +13,13 @@ class UCableComponent;
 class UNiagaraComponent;
 
 UCLASS()
-class SPACESCAVENGER_API AAHackable : public AAInteractable
+class SPACESCAVENGER_API AHackable : public AInteractable
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AAHackable();
+	AHackable();
 
 protected:
 	// Called when the game starts or when spawned

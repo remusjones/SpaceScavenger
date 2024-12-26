@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ADoor.h"
+#include "Door.h"
 
 // Sets default values
-AADoor::AADoor()
+ADoor::ADoor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,39 +12,39 @@ AADoor::AADoor()
 }
 
 // Called when the game starts or when spawned
-void AADoor::BeginPlay()
+void ADoor::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AADoor::Tick(float DeltaTime)
+void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void AADoor::Toggle()
+void ADoor::Toggle()
 {
 	bState = !bState;
 	if (DoorStateChangedDelegate.IsBound())
 		DoorStateChangedDelegate.Broadcast(bState);
 }
 
-void AADoor::Open()
+void ADoor::Open()
 {
 	if (!bState)
 		Toggle();
 }
 
-void AADoor::Close()
+void ADoor::Close()
 {
 	if (bState)
 		Toggle();
 }
 
-void AADoor::SetState(const bool NewState)
+void ADoor::SetState(const bool NewState)
 {
 	if (bState != NewState)
 	{

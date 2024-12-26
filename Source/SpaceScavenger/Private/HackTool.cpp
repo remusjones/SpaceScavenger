@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AHackTool.h"
-#include "AHackable.h"
-#include "AInteractable.h"
+#include "HackTool.h"
+#include "Hackable.h"
+#include "Interactable.h"
 #include "Components/TimelineComponent.h"
 
 // Sets default values
-AAHackTool::AAHackTool()
+AHackTool::AHackTool()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -15,13 +15,13 @@ AAHackTool::AAHackTool()
 }
 
 // Called when the game starts or when spawned
-void AAHackTool::BeginPlay()
+void AHackTool::BeginPlay()
 {
 	Super::BeginPlay();
 	ConfigureTimeline();
 }
 
-void AAHackTool::ConfigureTimeline()
+void AHackTool::ConfigureTimeline()
 {
 
 	HackingTimeline = NewObject<UTimelineComponent>(this, "Hacking Timeline");
@@ -36,7 +36,7 @@ void AAHackTool::ConfigureTimeline()
 	HackingTimeline->SetPlaybackPosition(0.0f, false);
 
 	FOnTimelineEventStatic OnTimelineFinishedCallback;
-	OnTimelineFinishedCallback.BindUObject(this, &AAHackTool::FinishedHacking);
+	OnTimelineFinishedCallback.BindUObject(this, &AHackTool::FinishedHacking);
 	FOnTimelineFloat OnTimelineCallback;
 	OnTimelineCallback.BindUFunction(this, FName("HackingTick"));
 	
@@ -46,7 +46,7 @@ void AAHackTool::ConfigureTimeline()
 	
 }
 // Called every frame
-void AAHackTool::Tick(float DeltaTime)
+void AHackTool::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
@@ -56,14 +56,14 @@ void AAHackTool::Tick(float DeltaTime)
 	}
 }
 
-void AAHackTool::UpdateDisplay(AAInteractable* HoveredInteractable)
+void AHackTool::UpdateDisplay(AInteractable* HoveredInteractable)
 {
 
 	if (ActiveToolState != EToolState::Idle)
 		return;
 	
 	
-	if (const AAHackable* Hackable = Cast<AAHackable>(HoveredInteractable); Hackable )
+	if (const AHackable* Hackable = Cast<AHackable>(HoveredInteractable); Hackable )
 	{
 		FFormatNamedArguments Args;
 		Args.Add("State", HackableStatusMessages.FindRef(Hackable->RequiresHack
@@ -81,9 +81,9 @@ void AAHackTool::UpdateDisplay(AAInteractable* HoveredInteractable)
 		
 }
 
-void AAHackTool::TryInteract(AAInteractable* TargetInteractable)
+void AHackTool::TryInteract(AInteractable* TargetInteractable)
 {
-	AAHackable* Hackable = Cast<AAHackable>(TargetInteractable);
+	AHackable* Hackable = Cast<AHackable>(TargetInteractable);
 	
 	switch (ActiveToolState)
 	{
@@ -96,13 +96,13 @@ void AAHackTool::TryInteract(AAInteractable* TargetInteractable)
 	}
 }
 
-void AAHackTool::FinishedHacking()
+void AHackTool::FinishedHacking()
 {
 	CurrentHackable->HackComplete();
 	InterruptHacking();
 }
 
-void AAHackTool::InterruptHacking()
+void AHackTool::InterruptHacking()
 {
 	CurrentHackable->AttachCable(nullptr);
 	CurrentHackable = nullptr;
@@ -117,27 +117,27 @@ void AAHackTool::InterruptHacking()
 	IsHacking = false;
 }
 
-void AAHackTool::Use()
+void AHackTool::Use()
 {
 	TryInteract(LastHovered);
 }
 
-void AAHackTool::UseHold()
+void AHackTool::UseHold()
 {
 }
 
-void AAHackTool::UseRelease()
+void AHackTool::UseRelease()
 {
 }
 
-void AAHackTool::UpdateHoveredInteractable(AAInteractable* hoveredInteractable)
+void AHackTool::UpdateHoveredInteractable(AInteractable* hoveredInteractable)
 {
 	LastHovered = hoveredInteractable;
 	UpdateDisplay(hoveredInteractable);
 }
 
 
-void AAHackTool::HackingTick(const float HackPercentage)
+void AHackTool::HackingTick(const float HackPercentage)
 {
 	HackPercentageDelegate.Broadcast(HackPercentage);
 
@@ -145,7 +145,7 @@ void AAHackTool::HackingTick(const float HackPercentage)
 		InterruptHacking();
 }
 
-void AAHackTool::BeginHacking(AAHackable* TargetHackable)
+void AHackTool::BeginHacking(AHackable* TargetHackable)
 {
 	ActiveToolState = EToolState::Hacking;
 	CurrentHackable = TargetHackable;

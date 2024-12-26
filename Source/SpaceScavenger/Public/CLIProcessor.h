@@ -4,20 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "ACCLIProcessor.generated.h"
+#include "CLIProcessor.generated.h"
 
 
-class AAHackable;
+class AHackable;
 DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(FString, FProcessCommandDelegate, const TArray<FString>&, Args);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPACESCAVENGER_API UACCLIProcessor : public UActorComponent
+class SPACESCAVENGER_API UCLIProcessor : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UACCLIProcessor();
+	UCLIProcessor();
 
 protected:
 	// Called when the game starts
@@ -38,7 +38,7 @@ public:
 	virtual bool ProcessCommand(TArray<FString> Args, FString& Output);
 
 	UFUNCTION(BlueprintCallable)
-	virtual bool ProcessListCommand(TArray<AAHackable*> ObjectsToList, TArray<FString> Args, FString& ObjectsAvailable);	
+	virtual bool ProcessListCommand(TArray<AHackable*> ObjectsToList, TArray<FString> Args, FString& ObjectsAvailable);	
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString CommandNamespace = "default";

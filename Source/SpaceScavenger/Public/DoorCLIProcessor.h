@@ -3,18 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ACCLIProcessor.h"
-#include "ACDoorCLIProcessor.generated.h"
+#include "CLIProcessor.h"
+#include "DoorCLIProcessor.generated.h"
 
-class AAHackable;
+class AHackable;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPACESCAVENGER_API UACDoorCLIProcessor : public UACCLIProcessor
+class SPACESCAVENGER_API UDoorCLIProcessor : public UCLIProcessor
 {
 	GENERATED_BODY()
 	virtual bool ProcessCommand(TArray<FString> Args, FString& Output) override;
 public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<AAHackable*> AccessibleInteractables;
+	TArray<AHackable*> AccessibleInteractables;
 };

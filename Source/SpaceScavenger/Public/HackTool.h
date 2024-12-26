@@ -5,15 +5,15 @@
 #include "CoreMinimal.h"
 #include "IPlayerTool.h"
 #include "GameFramework/Actor.h"
-#include "AHackTool.generated.h"
+#include "HackTool.generated.h"
 
 namespace ETimelineDirection
 {
 	enum Type : int;
 }
 
-class AAHackable;
-class AAInteractable;
+class AHackable;
+class AInteractable;
 class UTimelineComponent;
 UENUM(BlueprintType)
 
@@ -35,13 +35,13 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDisplayTextChangedDelegate, FText, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackFinished, bool, Succeeded);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHackStarted);
 UCLASS()
-class SPACESCAVENGER_API AAHackTool : public AActor, public IIPlayerTool
+class SPACESCAVENGER_API AHackTool : public AActor, public IIPlayerTool
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AAHackTool();
+	AHackTool();
 
 protected:
 	// Called when the game starts or when spawned
@@ -50,16 +50,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void UpdateDisplay(AAInteractable* hoveredInteractable); // Replace with IPlayerTool::UpdateHoveredInteractable() override
-	virtual void TryInteract(AAInteractable* TargetInteractable); // Replace with IPlayerTool::Use() override
-	virtual void BeginHacking(AAHackable* TargetHackable); // Replace with IPlayerTool::Use() override
+	virtual void UpdateDisplay(AInteractable* hoveredInteractable); // Replace with IPlayerTool::UpdateHoveredInteractable() override
+	virtual void TryInteract(AInteractable* TargetInteractable); // Replace with IPlayerTool::Use() override
+	virtual void BeginHacking(AHackable* TargetHackable); // Replace with IPlayerTool::Use() override
 	virtual void FinishedHacking();
 	virtual void InterruptHacking();
 
 	virtual void Use() override;
 	virtual void UseHold() override;
 	virtual void UseRelease() override;
-	virtual void UpdateHoveredInteractable(AAInteractable* hoveredInteractable) override;
+	virtual void UpdateHoveredInteractable(AInteractable* hoveredInteractable) override;
 	
 	
 	
@@ -100,9 +100,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool IsHacking;
 	UPROPERTY(BlueprintReadOnly)	
-	AAHackable* CurrentHackable;
+	AHackable* CurrentHackable;
 	UPROPERTY(BlueprintReadOnly)
-	AAInteractable* LastHovered;
+	AInteractable* LastHovered;
 private:
 
 	// Cached Variables

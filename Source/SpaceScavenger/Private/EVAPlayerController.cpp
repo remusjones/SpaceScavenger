@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "APlayerController.h"
-#include "AInteractable.h"
+#include "EVAPlayerController.h"
+#include "Interactable.h"
 #include "EasingFunctions.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -12,14 +12,14 @@
 
 
 // Sets default values
-AAPlayerController::AAPlayerController()
+AEVAPlayerController::AEVAPlayerController()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
 // Called when the game starts or when spawned
-void AAPlayerController::BeginPlay()
+void AEVAPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -36,7 +36,7 @@ void AAPlayerController::BeginPlay()
 }
 
 // Called every frame
-void AAPlayerController::Tick(float DeltaTime)
+void AEVAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	DetermineHover();
@@ -55,7 +55,7 @@ void AAPlayerController::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AEVAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(InputComponent);
@@ -68,14 +68,14 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 			Subsystem->AddMappingContext(InputMapping, 0);
 		}
 		
-		Input->BindAction(LookAction, ETriggerEvent::Triggered,this, &AAPlayerController::Look);
-		Input->BindAction(LookAction, ETriggerEvent::Completed,this, &AAPlayerController::Look);
-		Input->BindAction(InteractAction, ETriggerEvent::Started, this, &AAPlayerController::Interact);
+		Input->BindAction(LookAction, ETriggerEvent::Triggered,this, &AEVAPlayerController::Look);
+		Input->BindAction(LookAction, ETriggerEvent::Completed,this, &AEVAPlayerController::Look);
+		Input->BindAction(InteractAction, ETriggerEvent::Started, this, &AEVAPlayerController::Interact);
 		ConfigureRegularMovement();
 	}
 }
 
-void AAPlayerController::ConfigureEvaMovement()
+void AEVAPlayerController::ConfigureEvaMovement()
 {
 	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(InputComponent);
 	// Log
@@ -86,11 +86,11 @@ void AAPlayerController::ConfigureEvaMovement()
 	}
 	DynamicMovementBindings.Empty();
 	
-	FEnhancedInputActionEventBinding& movementTriggered = Input->BindAction(MoveAction, ETriggerEvent::Triggered,this, &AAPlayerController::MoveEva);
-	FEnhancedInputActionEventBinding& movementCompleted = Input->BindAction(MoveAction, ETriggerEvent::Completed,this, &AAPlayerController::MoveEva);
-	FEnhancedInputActionEventBinding& jumpTriggered = Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AAPlayerController::JumpHandlerEva);
-	FEnhancedInputActionEventBinding& crouchTriggered = Input->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAPlayerController::CrouchHandlerEva);
-	FEnhancedInputActionEventBinding& crouchCompleted = Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAPlayerController::CrouchHandlerEva);	
+	FEnhancedInputActionEventBinding& movementTriggered = Input->BindAction(MoveAction, ETriggerEvent::Triggered,this, &AEVAPlayerController::MoveEva);
+	FEnhancedInputActionEventBinding& movementCompleted = Input->BindAction(MoveAction, ETriggerEvent::Completed,this, &AEVAPlayerController::MoveEva);
+	FEnhancedInputActionEventBinding& jumpTriggered = Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AEVAPlayerController::JumpHandlerEva);
+	FEnhancedInputActionEventBinding& crouchTriggered = Input->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AEVAPlayerController::CrouchHandlerEva);
+	FEnhancedInputActionEventBinding& crouchCompleted = Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AEVAPlayerController::CrouchHandlerEva);	
 
 	DynamicMovementBindings.Emplace(&movementTriggered);
 	DynamicMovementBindings.Emplace(&movementCompleted);
@@ -102,7 +102,7 @@ void AAPlayerController::ConfigureEvaMovement()
 	
 }
 
-void AAPlayerController::ConfigureRegularMovement()
+void AEVAPlayerController::ConfigureRegularMovement()
 {
 	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(InputComponent);
 	UE_LOG(LogTemp, Warning, TEXT("Configuring Regular Movement") );
@@ -112,11 +112,11 @@ void AAPlayerController::ConfigureRegularMovement()
 	}
 	DynamicMovementBindings.Empty();
 	
-	FEnhancedInputActionEventBinding& movementTriggered = Input->BindAction(MoveAction, ETriggerEvent::Triggered,this, &AAPlayerController::Move);
-	FEnhancedInputActionEventBinding& movementCompleted = Input->BindAction(MoveAction, ETriggerEvent::Completed,this, &AAPlayerController::Move);
-	FEnhancedInputActionEventBinding& jumpTriggered = Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AAPlayerController::JumpHandler);
-	FEnhancedInputActionEventBinding& crouchTriggered = Input->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAPlayerController::CrouchHandler);
-	FEnhancedInputActionEventBinding& crouchCompleted = Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAPlayerController::CrouchHandler);	
+	FEnhancedInputActionEventBinding& movementTriggered = Input->BindAction(MoveAction, ETriggerEvent::Triggered,this, &AEVAPlayerController::Move);
+	FEnhancedInputActionEventBinding& movementCompleted = Input->BindAction(MoveAction, ETriggerEvent::Completed,this, &AEVAPlayerController::Move);
+	FEnhancedInputActionEventBinding& jumpTriggered = Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AEVAPlayerController::JumpHandler);
+	FEnhancedInputActionEventBinding& crouchTriggered = Input->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AEVAPlayerController::CrouchHandler);
+	FEnhancedInputActionEventBinding& crouchCompleted = Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AEVAPlayerController::CrouchHandler);	
 
 
 	DynamicMovementBindings.Emplace(&movementTriggered);
@@ -128,7 +128,7 @@ void AAPlayerController::ConfigureRegularMovement()
 	
 }
 
-void AAPlayerController::SetEva(const bool EvaState)
+void AEVAPlayerController::SetEva(const bool EvaState)
 {
 	if (MovementComponent == nullptr)
 		return;
@@ -148,12 +148,12 @@ void AAPlayerController::SetEva(const bool EvaState)
 	}
 }
 
-void AAPlayerController::ToggleEva()
+void AEVAPlayerController::ToggleEva()
 {
 	SetEva(!bIsEva);
 }
 
-void AAPlayerController::Move(const FInputActionValue& Value)
+void AEVAPlayerController::Move(const FInputActionValue& Value)
 {
 	const FVector Input = Value.Get<FVector>();
 	MovementVector = FVector(Input.Y, Input.X, 0); // adjust mapping
@@ -170,7 +170,7 @@ void AAPlayerController::Move(const FInputActionValue& Value)
 	AddMovementInput(MovementVector);
 }
 
-void AAPlayerController::MoveEva(const FInputActionValue& Value)
+void AEVAPlayerController::MoveEva(const FInputActionValue& Value)
 {
 	const FVector Input = Value.Get<FVector>();
 	MovementVector = FVector(Input.Y, Input.X, 0); // adjust mapping
@@ -187,7 +187,7 @@ void AAPlayerController::MoveEva(const FInputActionValue& Value)
 	MovementComponent->AddForce(MovementVector * EvaMovementSpeed);
 }
 
-void AAPlayerController::Look(const FInputActionValue& Value)
+void AEVAPlayerController::Look(const FInputActionValue& Value)
 {
 	RotationVector = Value.Get<FVector>();
 	
@@ -196,40 +196,40 @@ void AAPlayerController::Look(const FInputActionValue& Value)
 	AddControllerPitchInput(-RotationVector.Y);
 }
 
-void AAPlayerController::Interact(const FInputActionValue& Value)
+void AEVAPlayerController::Interact(const FInputActionValue& Value)
 {
 	if (ActiveTool)
 		ActiveTool->Use();
 }
 
-void AAPlayerController::JumpHandler(const FInputActionValue& Value)
+void AEVAPlayerController::JumpHandler(const FInputActionValue& Value)
 {
 	MovementComponent->AddForce(FVector(0,0, AirControl * EvaMovementSpeed));
 }
-void AAPlayerController::JumpHandlerEva(const FInputActionValue& Value)
+void AEVAPlayerController::JumpHandlerEva(const FInputActionValue& Value)
 {
 	JumpHandler(Value);
 	Super::Jump();
 }
 
-void AAPlayerController::CrouchHandler(const FInputActionValue& Value)
+void AEVAPlayerController::CrouchHandler(const FInputActionValue& Value)
 {
 	bIsCrouching = Value.Get<bool>();
 }
 
-void AAPlayerController::CrouchHandlerEva(const FInputActionValue& Value)
+void AEVAPlayerController::CrouchHandlerEva(const FInputActionValue& Value)
 {
 	MovementComponent->AddForce(FVector(0,0, AirControl * -EvaMovementSpeed));
 }
 
-void AAPlayerController::DetermineHover()
+void AEVAPlayerController::DetermineHover()
 {
 	const FVector StartLocation = CameraReference->GetComponentLocation();
 
 	TArray<FHitResult> Results;
 	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + CameraReference->GetForwardVector() * LineTraceLength, FCollisionObjectQueryParams::AllDynamicObjects);
 
-	AAInteractable* NewHoveredInteractable = nullptr;
+	AInteractable* NewHoveredInteractable = nullptr;
 	for (auto HitResult : Results)
 	{
 		AActor* HitActor = HitResult.GetActor();
@@ -239,7 +239,7 @@ void AAPlayerController::DetermineHover()
 
 		if (HitActor)
 		{
-			NewHoveredInteractable = Cast<AAInteractable>(HitActor);
+			NewHoveredInteractable = Cast<AInteractable>(HitActor);
 			
 			break;
 		}		
@@ -251,7 +251,7 @@ void AAPlayerController::DetermineHover()
 		ActiveTool->UpdateHoveredInteractable(NewHoveredInteractable);
 }
 
-void AAPlayerController::ChangeHoveredInteractable(AAInteractable* Interactable)
+void AEVAPlayerController::ChangeHoveredInteractable(AInteractable* Interactable)
 {
 	if (HoveredInteractable != Interactable)
 	{

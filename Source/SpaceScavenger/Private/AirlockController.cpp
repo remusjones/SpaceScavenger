@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AAirlockController.h"
+#include "AirlockController.h"
 
-#include "ADoor.h"
+#include "Door.h"
 
 // Sets default values
-AAAirlockController::AAAirlockController()
+AAirlockController::AAirlockController()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -14,7 +14,7 @@ AAAirlockController::AAAirlockController()
 }
 
 // Called when the game starts or when spawned
-void AAAirlockController::BeginPlay()
+void AAirlockController::BeginPlay()
 {
 	Super::BeginPlay();
 	check(InternalAirlock != nullptr)
@@ -22,7 +22,7 @@ void AAAirlockController::BeginPlay()
 }
 
 // Called every frame
-void AAAirlockController::Tick(float DeltaTime)
+void AAirlockController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -41,7 +41,7 @@ void AAAirlockController::Tick(float DeltaTime)
 
 }
 
-void AAAirlockController::CycleAirlock()
+void AAirlockController::CycleAirlock()
 {
 	switch (ECurrentAirlockState)
 	{
@@ -66,7 +66,7 @@ void AAAirlockController::CycleAirlock()
 		AirlockStateChangedDelegate.Broadcast(ECurrentAirlockState);
 }
 
-void AAAirlockController::FinalizeStateChange()
+void AAirlockController::FinalizeStateChange()
 {
 	InternalStateTimer = 0;
 	ECurrentAirlockState = ETargetAirlockState;

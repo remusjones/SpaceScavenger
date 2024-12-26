@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ACCLIProcessor.h"
+#include "CLIProcessor.h"
 
-#include "AHackable.h"
+#include "Hackable.h"
 
 // Sets default values for this component's properties
-UACCLIProcessor::UACCLIProcessor()
+UCLIProcessor::UCLIProcessor()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -17,7 +17,7 @@ UACCLIProcessor::UACCLIProcessor()
 
 
 // Called when the game starts
-void UACCLIProcessor::BeginPlay()
+void UCLIProcessor::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -27,14 +27,14 @@ void UACCLIProcessor::BeginPlay()
 
 
 // Called every frame
-void UACCLIProcessor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UCLIProcessor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
 }
 
-void UACCLIProcessor::BreakInput(const FString Input, FString& Command,
+void UCLIProcessor::BreakInput(const FString Input, FString& Command,
                                  TArray<FString>& Args)
 {
 	TArray<FString> SplitArray;
@@ -64,7 +64,7 @@ void UACCLIProcessor::BreakInput(const FString Input, FString& Command,
 	
 }
 
-void UACCLIProcessor::RegisterCommand(const FString Command, const FProcessCommandDelegate& Callback)
+void UCLIProcessor::RegisterCommand(const FString Command, const FProcessCommandDelegate& Callback)
 {
 	if (CommandProcessorMap.Contains(Command))
 	{
@@ -75,7 +75,7 @@ void UACCLIProcessor::RegisterCommand(const FString Command, const FProcessComma
 	}
 }
 
-void UACCLIProcessor::UnregisterCommand(const FString Command, const FProcessCommandDelegate& Callback)
+void UCLIProcessor::UnregisterCommand(const FString Command, const FProcessCommandDelegate& Callback)
 {
 	if (CommandProcessorMap.Contains(Command))
 	{
@@ -86,7 +86,7 @@ void UACCLIProcessor::UnregisterCommand(const FString Command, const FProcessCom
 }
 
 
-bool UACCLIProcessor::ProcessCommand(TArray<FString> Args, FString& Output)
+bool UCLIProcessor::ProcessCommand(TArray<FString> Args, FString& Output)
 {
 	bool CommandRegistered = false;
 	if (Args.Num() > 0)
@@ -118,7 +118,7 @@ bool UACCLIProcessor::ProcessCommand(TArray<FString> Args, FString& Output)
 	return CommandRegistered;
 }
 
-bool UACCLIProcessor::ProcessListCommand(TArray<AAHackable*> ObjectsToList,
+bool UCLIProcessor::ProcessListCommand(TArray<AHackable*> ObjectsToList,
 	TArray<FString> Args, FString& ObjectsAvailable)
 {
 	if (Args.Num() == 0)

@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ACDoorCLIProcessor.h"
-#include "AHackable.h"
+#include "DoorCLIProcessor.h"
+#include "Hackable.h"
 
-bool UACDoorCLIProcessor::ProcessCommand(TArray<FString> Args, FString& Output)
+bool UDoorCLIProcessor::ProcessCommand(TArray<FString> Args, FString& Output)
 {
 	if (Super::ProcessCommand(Args, Output))
 		return true;

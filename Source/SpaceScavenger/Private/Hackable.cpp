@@ -1,26 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AHackable.h"
+#include "Hackable.h"
 #include "CableComponent.h"
 #include "NiagaraComponent.h"
 #include "DrawDebugHelpers.h"
 // Sets default values
-AAHackable::AAHackable()
+AHackable::AHackable()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
 // Called when the game starts or when spawned
-void AAHackable::BeginPlay()
+void AHackable::BeginPlay()
 {
 	Super::BeginPlay();
 	CableComponent->SetTickGroup(TG_PostUpdateWork);
 }
 
 // Called every frame
-void AAHackable::Tick(float DeltaTime)
+void AHackable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -30,7 +30,7 @@ void AAHackable::Tick(float DeltaTime)
 }
 
 bool ignoreSimTimeoutFlag = false;
-void AAHackable::AttachCable(UActorComponent* Target)
+void AHackable::AttachCable(UActorComponent* Target)
 {
 	CableComponent->SetActive(true);
 	ignoreSimTimeoutFlag = true;
@@ -54,23 +54,23 @@ void AAHackable::AttachCable(UActorComponent* Target)
 			DisconnectEffect->Activate(true);
 		ignoreSimTimeoutFlag = false;
 		GetWorldTimerManager().SetTimer(CableTimerHandler, this,
-		 &AAHackable::DisableCableSimulation,
+		 &AHackable::DisableCableSimulation,
 		 CableSimulationTimer,false);
 	}
 }
 
-void AAHackable::DisableCableSimulation()
+void AHackable::DisableCableSimulation()
 {
 	if (!ignoreSimTimeoutFlag)
 		CableComponent->SetActive(false);
 }
 
-void AAHackable::HackStarted()
+void AHackable::HackStarted()
 {
 
 }
 
-void AAHackable::HackComplete()
+void AHackable::HackComplete()
 {
 	if (HackOnce)
 		RequiresHack = false;
@@ -79,7 +79,7 @@ void AAHackable::HackComplete()
 		Interact();
 }
 
-bool AAHackable::TryInteract()
+bool AHackable::TryInteract()
 {
 	if (!RequiresHack)
 		Interact();

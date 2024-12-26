@@ -4,19 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "AInteractable.generated.h"
+#include "Door.generated.h"
 
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractDelegate);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDoorStateChangedDelegate, bool, State);
 UCLASS()
-class SPACESCAVENGER_API AAInteractable : public AActor
+class SPACESCAVENGER_API ADoor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AAInteractable();
+	ADoor();
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,12 +23,20 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintCallable)
-	void Interact();
 
+	
+	UFUNCTION(BlueprintCallable, CallInEditor)
+	void Toggle();
+	UFUNCTION(BlueprintCallable)
+	void Open();
+	UFUNCTION(BlueprintCallable)
+	void Close();
+	UFUNCTION(BlueprintCallable)
+	void SetState(bool NewState);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bState = true;
 
 	UPROPERTY(BlueprintAssignable)
-	FInteractDelegate InteractDelegate;
-
-
+	FDoorStateChangedDelegate DoorStateChangedDelegate;
 };

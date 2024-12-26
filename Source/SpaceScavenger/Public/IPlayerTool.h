@@ -6,7 +6,7 @@
 #include "UObject/Interface.h"
 #include "IPlayerTool.generated.h"
 
-class AAInteractable;
+class AInteractable;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UIPlayerTool : public UInterface
@@ -26,5 +26,5 @@ public:
 	virtual void Use() = 0;
 	virtual void UseHold() = 0;
 	virtual void UseRelease() = 0;
-	virtual void UpdateHoveredInteractable(AAInteractable* HoveredInteractable) = 0;
+	virtual void UpdateHoveredInteractable(AInteractable* HoveredInteractable) = 0;
 };
