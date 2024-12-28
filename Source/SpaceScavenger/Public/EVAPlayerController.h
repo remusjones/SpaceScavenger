@@ -9,10 +9,19 @@
 #include "GameFramework/Character.h"
 #include "EVAPlayerController.generated.h"
 
-class IIPlayerTool;
+UENUM(BlueprintType)
+enum class EMovementType : uint8
+{
+    VE_Walking UMETA(DisplayName = "None"),
+    VE_EVA UMETA(DisplayName = "Eva"),
+};
+
+
+class IPlayerTool;
 class UInputMappingContext;
 class UInputAction;
 class AInteractable;
+class UEvaDesignData;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHoveredChangedDelegate, AInteractable*, HoveredInteractable);
@@ -39,27 +48,9 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	void ConfigureEvaMovement();
 	void ConfigureRegularMovement();
-	void SetEva(bool EvaState);
+	void SetMovementType(const EMovementType& MovementType);
 	void ToggleEva();
-	// Input
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
-	UInputMappingContext* InputMapping;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
-	UInputAction* MoveAction;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
-	UInputAction* JumpAction;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
-	UInputAction* LookAction;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
-	UInputAction* InteractAction;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput")
-	UInputAction* CrouchAction;
-	
-	// Movement
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
-	FVector MovementVector;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
-	FVector RotationVector;	
+
 
 	// Interaction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
@@ -68,7 +59,7 @@ public:
 	float LineTraceLength = 5;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
-	TScriptInterface<IIPlayerTool> ActiveTool;
+	TScriptInterface<IPlayerTool> ActiveTool;
 	
 	// Delegates
 	UPROPERTY(BlueprintAssignable)
@@ -78,38 +69,59 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FHoveredChangedDelegate HoveredChangedDelegate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Settings")
+	TSoftObjectPtr<UEvaDesignData> EvaDesignData;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
-	float AirControl = 0.66;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
-	float WalkSpeed = 300;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
-	float CrouchWalkSpeed = 150;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
-	float CrouchSpeed = 15.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
-	bool bIsEva = false;
+	EMovementType CurrentMovementType = EMovementType::VE_Walking;
 	UPROPERTY(BlueprintReadOnly)	
 	AInteractable* HoveredInteractable;
 
 	
 private:
+	
 	void Move(const FInputActionValue& Value);
 	void MoveEva(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
-	void JumpHandler(const FInputActionValue& Value);
+	void Jump(const FInputActionValue& Value);
 	void JumpHandlerEva(const FInputActionValue& Value);
-	void CrouchHandler(const FInputActionValue& Value);
-	void CrouchHandlerEva(const FInputActionValue& Value);
+	void Crouch(const FInputActionValue& Value);
+	void CrouchEva(const FInputActionValue& Value);
 	void DetermineHover();
 	void ChangeHoveredInteractable(AInteractable* Interactable);
 
+
+private:
+
+	// Input
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput", meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* InputMapping;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput", meta = (AllowPrivateAccess = "true"))
+	UInputAction* MoveAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput", meta = (AllowPrivateAccess = "true"))
+	UInputAction* JumpAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput", meta = (AllowPrivateAccess = "true"))
+	UInputAction* LookAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput", meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput", meta = (AllowPrivateAccess = "true"))
+	UInputAction* CrouchAction;
+	
+	// Movement
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	FVector MovementVector;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	FVector RotationVector;	
+
+
+	
 	float EvaMovementSpeed = 10000;
 	float CrouchNorm = 1.0f;
 	float DefaultCapsuleHalfHeight = 88.0f;
 	UPROPERTY() 
 	UCharacterMovementComponent* MovementComponent;
-	bool bIsCrouching = false;
+
 	UPROPERTY()
 	UCapsuleComponent* BodyCapsuleComponent;
 

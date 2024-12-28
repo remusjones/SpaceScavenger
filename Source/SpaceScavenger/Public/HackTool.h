@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "IPlayerTool.h"
+#include "PlayerTool.h"
 #include "GameFramework/Actor.h"
 #include "HackTool.generated.h"
 
@@ -35,7 +35,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDisplayTextChangedDelegate, FText, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackFinished, bool, Succeeded);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHackStarted);
 UCLASS()
-class SPACESCAVENGER_API AHackTool : public AActor, public IIPlayerTool
+class SPACESCAVENGER_API AHackTool : public AActor, public IPlayerTool
 {
 	GENERATED_BODY()
 	
@@ -50,7 +50,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void UpdateDisplay(AInteractable* hoveredInteractable); // Replace with IPlayerTool::UpdateHoveredInteractable() override
+	virtual void UpdateDisplay(AInteractable* HoveredInteractable); // Replace with IPlayerTool::UpdateHoveredInteractable() override
 	virtual void TryInteract(AInteractable* TargetInteractable); // Replace with IPlayerTool::Use() override
 	virtual void BeginHacking(AHackable* TargetHackable); // Replace with IPlayerTool::Use() override
 	virtual void FinishedHacking();
@@ -59,7 +59,7 @@ public:
 	virtual void Use() override;
 	virtual void UseHold() override;
 	virtual void UseRelease() override;
-	virtual void UpdateHoveredInteractable(AInteractable* hoveredInteractable) override;
+	virtual void UpdateHoveredInteractable(AInteractable* HoveredInteractable) override;
 	
 	
 	

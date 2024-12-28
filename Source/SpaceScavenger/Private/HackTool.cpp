@@ -130,10 +130,10 @@ void AHackTool::UseRelease()
 {
 }
 
-void AHackTool::UpdateHoveredInteractable(AInteractable* hoveredInteractable)
+void AHackTool::UpdateHoveredInteractable(AInteractable* HoveredInteractable)
 {
-	LastHovered = hoveredInteractable;
-	UpdateDisplay(hoveredInteractable);
+	LastHovered = HoveredInteractable;
+	UpdateDisplay(HoveredInteractable);
 }
 
 
