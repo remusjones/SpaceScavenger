@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "PlayerTool.generated.h"
+#include "PlayerHandItem.generated.h"
 
 class AInteractable;
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
-class UPlayerTool : public UInterface
+UINTERFACE(Blueprintable)
+class UPlayerHandItem : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,7 +17,7 @@ class UPlayerTool : public UInterface
 /**
  * 
  */
-class SPACESCAVENGER_API IPlayerTool
+class SPACESCAVENGER_API IPlayerHandItem
 {
 	GENERATED_BODY()
 

@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class SPACESCAVENGER_API UEvaDesignData : public UDataAsset
 {
 	GENERATED_BODY()
@@ -23,4 +23,9 @@ public:
 	float CrouchWalkSpeed = 150;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Settings")
 	float CrouchSpeed = 15.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Settings")
+	float EvaMovementSpeed = 10000;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	float LineTraceLength = 5;
+	
 };

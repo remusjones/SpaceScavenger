@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlayerTool.h"
+#include "PlayerHandItem.h"
 #include "GameFramework/Actor.h"
 #include "HackTool.generated.h"
 
@@ -35,7 +35,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDisplayTextChangedDelegate, FText, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHackFinished, bool, Succeeded);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHackStarted);
 UCLASS()
-class SPACESCAVENGER_API AHackTool : public AActor, public IPlayerTool
+class SPACESCAVENGER_API AHackTool : public AActor, public IPlayerHandItem
 {
 	GENERATED_BODY()
 	
@@ -60,7 +60,6 @@ public:
 	virtual void UseHold() override;
 	virtual void UseRelease() override;
 	virtual void UpdateHoveredInteractable(AInteractable* HoveredInteractable) override;
-	
 	
 	
 	UFUNCTION()
@@ -95,14 +94,15 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FHackStarted HackStartedDelegate;
 	
-	UPROPERTY()
+	UPROPERTY(Transient)
 	float InterpFloatCurve;
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Transient)
 	bool IsHacking;
-	UPROPERTY(BlueprintReadOnly)	
+	UPROPERTY(BlueprintReadOnly, Transient)	
 	AHackable* CurrentHackable;
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Transient)
 	AInteractable* LastHovered;
+	
 private:
 
 	// Cached Variables

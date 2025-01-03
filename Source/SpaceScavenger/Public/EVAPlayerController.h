@@ -9,6 +9,8 @@
 #include "GameFramework/Character.h"
 #include "EVAPlayerController.generated.h"
 
+class UHandItemsDataAsset;
+
 UENUM(BlueprintType)
 enum class EMovementType : uint8
 {
@@ -17,7 +19,7 @@ enum class EMovementType : uint8
 };
 
 
-class IPlayerTool;
+class IPlayerHandItem;
 class UInputMappingContext;
 class UInputAction;
 class AInteractable;
@@ -51,15 +53,12 @@ public:
 	void SetMovementType(const EMovementType& MovementType);
 	void ToggleEva();
 
-
 	// Interaction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	USceneComponent* CameraReference;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
-	float LineTraceLength = 5;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
-	TScriptInterface<IPlayerTool> ActiveTool;
+	TScriptInterface<IPlayerHandItem> ActiveTool;
 	
 	// Delegates
 	UPROPERTY(BlueprintAssignable)
@@ -69,10 +68,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FHoveredChangedDelegate HoveredChangedDelegate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Settings")
-	TSoftObjectPtr<UEvaDesignData> EvaDesignData;
+
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Overrides")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Overrides")
 	EMovementType CurrentMovementType = EMovementType::VE_Walking;
 	UPROPERTY(BlueprintReadOnly)	
 	AInteractable* HoveredInteractable;
@@ -91,9 +89,7 @@ private:
 	void DetermineHover();
 	void ChangeHoveredInteractable(AInteractable* Interactable);
 
-
 private:
-
 	// Input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* InputMapping;
@@ -107,32 +103,40 @@ private:
 	UInputAction* InteractAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput", meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
-	
-	// Movement
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-	FVector MovementVector;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-	FVector RotationVector;	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "EnhancedInput", meta = (AllowPrivateAccess = "true"))
+	UInputAction* IncrementToolAction;
 
 
-	
-	float EvaMovementSpeed = 10000;
-	float CrouchNorm = 1.0f;
-	float DefaultCapsuleHalfHeight = 88.0f;
 	UPROPERTY() 
 	UCharacterMovementComponent* MovementComponent;
 
 	UPROPERTY()
 	UCapsuleComponent* BodyCapsuleComponent;
-
 	
 	TArray<FEnhancedInputActionEventBinding*> DynamicMovementBindings;
-
 	FInputActionBinding MoveBinding;
 	FInputActionBinding JumpBinding;
 	FInputActionBinding CrouchBinding;
 	FInputActionBinding InteractBinding;
 	FInputActionBinding LookBinding;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Settings", meta = (AllowPrivateAccess = "true"))
+	TSoftObjectPtr<UEvaDesignData> EvaDesignData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Settings", meta = (AllowPrivateAccess = "true"))
+	TSoftObjectPtr<UHandItemsDataAsset> HandItemsDesignData;
+
+	// Movement
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"), Transient)
+	FVector MovementVector;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"), Transient)
+	FVector RotationVector;	
+
+	UPROPERTY(Transient)
+	float CrouchNorm = 1.0f;
+	UPROPERTY(Transient)
+	float DefaultCapsuleHalfHeight = 88.0f;
 
 	
 };

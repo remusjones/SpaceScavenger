@@ -83,6 +83,9 @@ void AHackTool::UpdateDisplay(AInteractable* HoveredInteractable)
 
 void AHackTool::TryInteract(AInteractable* TargetInteractable)
 {
+	if (!TargetInteractable)
+		return;
+		
 	AHackable* Hackable = Cast<AHackable>(TargetInteractable);
 	
 	switch (ActiveToolState)
@@ -98,12 +101,18 @@ void AHackTool::TryInteract(AInteractable* TargetInteractable)
 
 void AHackTool::FinishedHacking()
 {
+	if (!CurrentHackable)
+		return;
+	
 	CurrentHackable->HackComplete();
 	InterruptHacking();
 }
 
 void AHackTool::InterruptHacking()
 {
+	if (!CurrentHackable)
+		return;
+	
 	CurrentHackable->AttachCable(nullptr);
 	CurrentHackable = nullptr;
 	ActiveToolState = EToolState::Idle;

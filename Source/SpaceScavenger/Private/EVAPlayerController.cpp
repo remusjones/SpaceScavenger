@@ -4,7 +4,7 @@
 #include "EasingFunctions.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-#include "PlayerTool.h"
+#include "PlayerHandItem.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -24,8 +24,7 @@ void AEVAPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	check(EvaDesignData);
-	
+	EvaDesignData = EvaDesignData.LoadSynchronous();
 	MovementComponent = GetCharacterMovement();
 	MovementComponent->MaxWalkSpeed = EvaDesignData->WalkSpeed;
 	MovementComponent->MaxWalkSpeedCrouched = EvaDesignData->CrouchWalkSpeed;
@@ -159,6 +158,7 @@ void AEVAPlayerController::SetMovementType(const EMovementType& MovementType)
 
 void AEVAPlayerController::ToggleEva()
 {
+	// Toggle between EVA and Walking
 	SetMovementType(CurrentMovementType == EMovementType::VE_EVA ? EMovementType::VE_Walking : EMovementType::VE_EVA);
 }
 
@@ -193,7 +193,7 @@ void AEVAPlayerController::MoveEva(const FInputActionValue& Value)
 	if (MovementVector.Length() > 0)
 		MovementVector/=2;
 	
-	MovementComponent->AddForce(MovementVector * EvaMovementSpeed);
+	MovementComponent->AddForce(MovementVector * EvaDesignData->EvaMovementSpeed);
 }
 
 void AEVAPlayerController::Look(const FInputActionValue& Value)
@@ -213,7 +213,7 @@ void AEVAPlayerController::Interact(const FInputActionValue& Value)
 
 void AEVAPlayerController::Jump(const FInputActionValue& Value)
 {
-	MovementComponent->AddForce(FVector(0,0, MovementComponent->AirControl * EvaMovementSpeed));
+	MovementComponent->AddForce(FVector(0,0, MovementComponent->AirControl * EvaDesignData->EvaMovementSpeed));
 }
 void AEVAPlayerController::JumpHandlerEva(const FInputActionValue& Value)
 {
@@ -228,7 +228,7 @@ void AEVAPlayerController::Crouch(const FInputActionValue& Value)
 
 void AEVAPlayerController::CrouchEva(const FInputActionValue& Value)
 {
-	MovementComponent->AddForce(FVector(0,0, MovementComponent->AirControl * -EvaMovementSpeed));
+	MovementComponent->AddForce(FVector(0,0, MovementComponent->AirControl * -EvaDesignData->EvaMovementSpeed));
 }
 
 void AEVAPlayerController::DetermineHover()
@@ -236,7 +236,7 @@ void AEVAPlayerController::DetermineHover()
 	const FVector StartLocation = CameraReference->GetComponentLocation();
 
 	TArray<FHitResult> Results;
-	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + CameraReference->GetForwardVector() * LineTraceLength, FCollisionObjectQueryParams::AllDynamicObjects);
+	GetWorld()->LineTraceMultiByObjectType(Results, StartLocation, StartLocation + CameraReference->GetForwardVector() * EvaDesignData->LineTraceLength, FCollisionObjectQueryParams::AllDynamicObjects);
 
 	AInteractable* NewHoveredInteractable = nullptr;
 	for (auto HitResult : Results)
@@ -249,7 +249,6 @@ void AEVAPlayerController::DetermineHover()
 		if (HitActor)
 		{
 			NewHoveredInteractable = Cast<AInteractable>(HitActor);
-			
 			break;
 		}		
 	}
